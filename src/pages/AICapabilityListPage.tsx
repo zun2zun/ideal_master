@@ -669,49 +669,32 @@ export default function AICapabilityListPage() {
         />
       </InputGroup>
 
-      {/* カテゴリ別表示 */}
-      <Accordion allowMultiple allowToggle>
+      {/* 3カラムグリッドレイアウト */}
+      <SimpleGrid 
+        columns={{ base: 1, md: 2, lg: 3 }} 
+        spacing={8}
+        px={4}
+      >
         {aiCapabilityGroups.map((group) => (
-          <AccordionItem key={group.id}>
-            <h2>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  <Heading size="md" mb={2}>{group.title}</Heading>
-                  <Text color="gray.600" fontSize="sm">
-                    {group.description}
-                  </Text>
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-                {capabilities
-                  .filter(cap => 
-                    group.categories.some(cat => 
-                      cap.category?.some(c => c.includes(cat))
-                    )
-                  )
-                  .map(cap => (
-                    <Box key={cap.id} borderWidth="1px" borderRadius="lg" p={4}>
-                      <Heading size="sm" mb={2}>{cap.title}</Heading>
-                      <Text fontSize="sm" color="gray.600" mb={2}>
-                        {cap.description}
-                      </Text>
-                      <HStack spacing={2} wrap="wrap">
-                        {cap.category?.map((cat) => (
-                          <Tag size="sm" key={cat}>
-                            {getCategoryDisplayName(cat)}
-                          </Tag>
-                        ))}
-                      </HStack>
-                    </Box>
-                  ))}
-              </SimpleGrid>
-            </AccordionPanel>
-          </AccordionItem>
+          <Box 
+            key={group.id}
+            bg="rgba(0, 184, 212, 0.05)"
+            borderRadius="lg"
+            overflow="hidden"
+            borderWidth="1px"
+            borderColor="rgba(0, 184, 212, 0.3)"
+          >
+            <Box p={6}>
+              <Heading size="md" mb={3} color="cyan.400">
+                {group.title}
+              </Heading>
+              <Text color="gray.300" fontSize="sm">
+                {group.description}
+              </Text>
+            </Box>
+          </Box>
         ))}
-      </Accordion>
+      </SimpleGrid>
     </Container>
   );
 }

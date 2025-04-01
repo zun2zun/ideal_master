@@ -17,7 +17,7 @@ const navLinks = [
     label: '特設',
     subMenu: [
       { path: '/capabilities', label: 'AI活用カテゴリ' },
-      { path: '/ai-rist', label: 'AIで出来ることリスト' }
+      { path: '/ai-list', label: 'AIで出来ることリスト' }
     ]
   },
   { path: '/company', label: '会社情報' },
