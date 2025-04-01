@@ -141,33 +141,19 @@ export default function AICapabilitiesPage() {
   }, [capabilities]);
 
   const filterByCategory = (category: string) => {
-    console.log(`Filtering for category: ${category}`);
-    console.log('Available capabilities:', capabilities);
-    
-    if (!capabilities || capabilities.length === 0) {
-      console.log('No capabilities available');
-      return [];
-    }
-
     const filtered = capabilities.filter(cap => {
-      console.log(`Checking capability for ${category}:`, cap);
-      if (!cap.category || !Array.isArray(cap.category)) {
-        console.log('Invalid category format for capability:', cap);
-        return false;
-      }
-      
-      // カテゴリの内部値を取得して比較
       const matches = cap.category.some(cat => {
         const internalCat = cat.split('（')[0].trim();
-        console.log('Comparing:', internalCat, 'with', category);
         return internalCat === category;
       });
-      
-      console.log(`Matches for ${cap.title}:`, matches);
       return matches;
     });
-
-    console.log(`Filtered results for ${category}:`, filtered);
+    
+    // デバッグ用ログ
+    console.log(`=== ${category} ===`);
+    console.log('Filtered count:', filtered.length);
+    console.log('Filtered items:', filtered.map(item => item.title));
+    
     return filtered;
   };
 

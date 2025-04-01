@@ -81,20 +81,10 @@ const getCategoryDisplayName = (category: string) => {
   return categoryDisplayNames[category] || category;
 };
 
-// カルーセルのカスタムスタイル
+// カルーセルのカスタムスタイルを修正
 const customStyles = `
   .slick-slide {
-    padding: 0 10px;
-  }
-  .slick-track {
-    display: flex;
-    align-items: center;
-  }
-  .capability-slider {
-    margin: 0 auto;
-  }
-  .slick-prev, .slick-next {
-    display: none !important;
+    padding: 0 0px;
   }
 `;
 
@@ -104,39 +94,37 @@ const AICapabilitySection: React.FC<AICapabilitySectionProps> = ({
   contents
 }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
-  console.log('Rendering section:', title);
-  console.log('Contents:', contents);
+  console.log(`=== Rendering ${title} ===`);
+  console.log('Contents count:', contents.length);
+  console.log('Contents:', contents.map(c => c.title));
 
-  // スライダー設定
+  // スライダー設定を条件分岐
   const sliderSettings = {
     dots: false,
-    infinite: contents.length > 3,
-    autoplay: true,
+    infinite: contents.length > 1,  // カードが1枚の場合はinfiniteをfalseに
+    autoplay: contents.length > 1,  // カードが1枚の場合はautoplayもfalseに
     pauseOnHover: true,
     speed: 500,
-    slidesToShow: Math.min(4, contents.length),
+    slidesToShow: 4,
     slidesToScroll: 1,
     autoplaySpeed: 3000,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: Math.min(3, contents.length),
-          slidesToScroll: 1,
+          slidesToShow: 3,
         }
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: Math.min(2, contents.length),
-          slidesToScroll: 1,
+          slidesToShow: 2,
         }
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
+          slidesToShow: 1.5,
           arrows: false,
         }
       }
@@ -192,48 +180,59 @@ const AICapabilitySection: React.FC<AICapabilitySectionProps> = ({
                     bg="rgba(0, 184, 212, 0.05)"
                     borderRadius="lg"
                     overflow="hidden"
-                    h="280px"
-                    transition="all 0.3s"
-                    _hover={{
-                      transform: 'translateY(-4px)',
-                      boxShadow: '0 4px 20px rgba(0, 184, 212, 0.2)',
-                    }}
+                    h="0"
+                    pb="100%"
+                    w="100%"
+                    maxW="240px"
+                    mx="auto"
+                    position="relative"
                   >
-                    <Box 
-                      position="relative"
-                      w="100%"
-                      h="160px"
-                      overflow="hidden"
+                    <Box
+                      position="absolute"
+                      top="0"
+                      left="0"
+                      right="0"
+                      bottom="0"
+                      display="flex"
+                      flexDirection="column"
                     >
-                      <Image
-                        src={content.thumbnail?.url}
-                        alt={content.title}
-                        objectFit="cover"
+                      <Box 
+                        position="relative"
                         w="100%"
-                        h="100%"
-                        fallbackSrc="/placeholder-image.png"
-                      />
+                        h="58%"
+                      >
+                        <Image
+                          src={content.thumbnail?.url}
+                          alt={content.title}
+                          objectFit="cover"
+                          w="100%"
+                          h="100%"
+                          fallbackSrc="/placeholder-image.png"
+                        />
+                      </Box>
+                      <VStack 
+                        align="start" 
+                        p="5%"
+                        spacing="2%"
+                        h="42%"
+                      >
+                        <Heading 
+                          size="sm" 
+                          color="white"
+                          noOfLines={2}
+                          fontSize="clamp(12px, 5.8%, 14px)"
+                        >
+                          {content.title}
+                        </Heading>
+                        <Text 
+                          fontSize="clamp(11px, 5.4%, 13px)"
+                          color="gray.300"
+                          noOfLines={2}
+                        >
+                          {content.description}
+                        </Text>
+                      </VStack>
                     </Box>
-                    <VStack 
-                      align="start" 
-                      p={4} 
-                      spacing={2}
-                    >
-                      <Heading 
-                        size="sm" 
-                        color="white"
-                        noOfLines={2}
-                      >
-                        {content.title}
-                      </Heading>
-                      <Text 
-                        fontSize="sm" 
-                        color="gray.300"
-                        noOfLines={2}
-                      >
-                        {content.description}
-                      </Text>
-                    </VStack>
                   </Box>
                 </Link>
               </Box>
