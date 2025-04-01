@@ -74,7 +74,12 @@ const CATEGORY_INFO = {
   risk_management: { display: 'リスク管理・セキュリティ', challenge: '組織のリスク管理を強化' }
 };
 
-interface AICapabilityContent extends Omit<AICapability, 'contents'> {
+// AICapabilityContentの型定義を修正
+interface AICapabilityContent {
+  id: string;
+  title: string;
+  description: string;
+  category: string[];
   technologies: string[];
   thumbnail: {
     url: string;
@@ -100,14 +105,28 @@ export default function AICapabilitiesPage() {
   useEffect(() => {
     const fetchCapabilities = async () => {
       try {
+        console.log('Starting to fetch capabilities...');
         const data = await getCapabilities();
+        console.log('Received data:', data);
+
+        // データが配列の場合は直接使用
         if (Array.isArray(data)) {
-          setCapabilities(data as AICapabilityContent[]);
-        } else {
+          console.log('Setting capabilities array:', data);
+          setCapabilities(data);
+        } 
+        // データがresponseオブジェクトの場合はcontentsを使用
+        else if (data && data.contents) {
+          console.log('Setting capabilities from contents:', data.contents);
+          setCapabilities(data.contents);
+        }
+        // それ以外の場合はエラー
+        else {
+          console.error('Invalid data format:', data);
           setError('データの形式が不正です');
         }
       } catch (error) {
-        setError('データの取得に失敗しました');
+        console.error('Fetch error:', error);
+        setError(`データの取得に失敗しました: ${error instanceof Error ? error.message : '不明なエラー'}`);
       } finally {
         setLoading(false);
       }
@@ -116,20 +135,53 @@ export default function AICapabilitiesPage() {
     fetchCapabilities();
   }, []);
 
-  if (loading) return <Box p={8}>Loading...</Box>;
-  if (error) return <Box p={8} color="red.500">{error}</Box>;
+  // デバッグ用のログ出力を追加
+  useEffect(() => {
+    console.log('Current capabilities:', capabilities);
+  }, [capabilities]);
 
   const filterByCategory = (category: string) => {
     console.log(`Filtering for category: ${category}`);
     console.log('Available capabilities:', capabilities);
+    
+    if (!capabilities || capabilities.length === 0) {
+      console.log('No capabilities available');
+      return [];
+    }
+
     const filtered = capabilities.filter(cap => {
-      console.log(`Checking capability:`, cap);
-      if (!cap.category || !Array.isArray(cap.category)) return false;
-      return cap.category.some(cat => cat === category); // 完全一致に変更
+      console.log(`Checking capability for ${category}:`, cap);
+      if (!cap.category || !Array.isArray(cap.category)) {
+        console.log('Invalid category format for capability:', cap);
+        return false;
+      }
+      const matches = cap.category.includes(category);
+      console.log(`Matches category ${category}:`, matches);
+      return matches;
     });
+
     console.log(`Filtered results for ${category}:`, filtered);
     return filtered;
   };
+
+  if (loading) {
+    return (
+      <Box p={8} textAlign="center">
+        <Text color="white">データを読み込んでいます...</Text>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box p={8} textAlign="center">
+        <Text color="red.500">{error}</Text>
+        <Text color="white" mt={4}>
+          エラーの詳細はコンソールを確認してください
+        </Text>
+      </Box>
+    );
+  }
 
   return (
     <Container maxW="1200px" py={12}>

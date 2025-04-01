@@ -23,23 +23,49 @@ interface AICapabilitySectionProps {
   contents: AICapabilityContent[];
 }
 
-// カテゴリの内部値と表示名のマッピング
+// カテゴリの内部値と表示名のマッピングを更新
 const categoryMapping = {
-  '文章作成': 'text_creation',
-  '画像生成': 'image_generation',
-  '動画作成': 'video_creation',
-  'シフト管理': 'shift_management'
+  'text_creation': '文章作成',
+  'image_generation': '画像生成',
+  'video_creation': '動画作成',
+  'shift_management': 'シフト管理',
+  'document_creation': '文書作成・管理',
+  'meeting_support': '会議・ミーティング支援',
+  'customer_support': 'カスタマーサポート',
+  'data_analysis': 'データ分析・レポート',
+  'translation': '翻訳・多言語対応',
+  'design_support': 'デザイン支援',
+  'marketing_analysis': 'マーケティング分析',
+  // ... 他のカテゴリも同様に追加
 };
 
-// フィルタリング時に使用
-const filterByCategory = (capabilities: any[], category: string) => {
-  const internalCategory = Object.entries(categoryMapping).find(
-    ([display]) => display === category
-  )?.[1];
+// カテゴリの文字列から内部値を取得する関数を追加
+const getInternalCategory = (category: string) => {
+  // "category_name（表示名）" の形式から category_name を取得
+  return category.split('（')[0].trim();
+};
+
+// filterByCategory関数を修正
+const filterByCategory = (capabilities: AICapabilityContent[], categoryKey: string) => {
+  console.log('Filtering for category:', categoryKey);
+  console.log('Available capabilities:', capabilities);
   
-  return capabilities.filter(cap => 
-    cap.category.includes(category) || (internalCategory && cap.category.includes(internalCategory))
-  );
+  return capabilities.filter(cap => {
+    if (!cap.category || !Array.isArray(cap.category)) {
+      console.log('Invalid category format for:', cap);
+      return false;
+    }
+    
+    // カテゴリの内部値を取得して比較
+    const matches = cap.category.some(cat => {
+      const internalCat = getInternalCategory(cat);
+      console.log('Comparing:', internalCat, 'with', categoryKey);
+      return internalCat === categoryKey;
+    });
+    
+    console.log('Matches for', cap.title, ':', matches);
+    return matches;
+  });
 };
 
 // カテゴリの表示名マッピング
@@ -78,43 +104,45 @@ const AICapabilitySection: React.FC<AICapabilitySectionProps> = ({
   contents
 }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
+  console.log('Rendering section:', title);
+  console.log('Contents:', contents);
 
-  // 関連コンテンツと同じスライダー設定を使用
+  // スライダー設定
   const sliderSettings = {
     dots: false,
-    infinite: true,
+    infinite: contents.length > 3,
     autoplay: true,
     pauseOnHover: true,
     speed: 500,
-    slidesToShow: 4,  // PCでは4枚表示
+    slidesToShow: Math.min(4, contents.length),
     slidesToScroll: 1,
     autoplaySpeed: 3000,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: Math.min(3, contents.length),
           slidesToScroll: 1,
         }
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 2.5,
+          slidesToShow: Math.min(2, contents.length),
           slidesToScroll: 1,
         }
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1.5,
+          slidesToShow: 1,
           slidesToScroll: 1,
           arrows: false,
         }
       }
     ]
   };
-  
+
   return (
     <Box
       py={isMobile ? 4 : 12}
@@ -135,46 +163,37 @@ const AICapabilitySection: React.FC<AICapabilitySectionProps> = ({
     >
       {/* ヘッダー部分 */}
       <Box mb={isMobile ? 4 : 8}>
-        <HStack justify="space-between" align="center" mb={2}>
-          <Heading 
-            as="h2" 
-            size={isMobile ? "md" : "lg"}
-            bgGradient="linear(to-r, cyan.400, blue.500)"
-            bgClip="text"
-          >
-            {title}
-          </Heading>
-          {isMobile && (
-            <Link to={`/category/${title}`}>
-              <HStack spacing={1} color="cyan.400">
-                <Text fontSize="sm">もっと見る</Text>
-                <Icon as={FaChevronRight} w={3} h={3} />
-              </HStack>
-            </Link>
-          )}
-        </HStack>
+        <Heading 
+          as="h2" 
+          size={isMobile ? "md" : "lg"}
+          bgGradient="linear(to-r, cyan.400, blue.500)"
+          bgClip="text"
+          mb={2}
+        >
+          {title}
+        </Heading>
         <Text 
-          fontSize={isMobile ? "sm" : "lg"}
+          fontSize={isMobile ? "sm" : "md"}
           color="gray.300"
-          maxW="800px"
         >
           {challenge}
         </Text>
       </Box>
 
-      {/* カルーセル表示 */}
-      <Box maxW="1200px" mx="auto">
-        <style>{customStyles}</style>
-        <Box className="capability-slider">
+      {/* カード表示部分 */}
+      {contents && contents.length > 0 ? (
+        <Box maxW="1200px" mx="auto" overflow="hidden">
+          <style>{customStyles}</style>
           <Slider {...sliderSettings}>
             {contents.map((content) => (
               <Box key={content.id} px={2}>
-                <Link to={`/tools/${content.id}`}>
+                <Link to={`/capabilities/${content.id}`}>
                   <Box
                     bg="rgba(0, 184, 212, 0.05)"
                     borderRadius="lg"
                     overflow="hidden"
                     h="280px"
+                    transition="all 0.3s"
                     _hover={{
                       transform: 'translateY(-4px)',
                       boxShadow: '0 4px 20px rgba(0, 184, 212, 0.2)',
@@ -192,38 +211,28 @@ const AICapabilitySection: React.FC<AICapabilitySectionProps> = ({
                         objectFit="cover"
                         w="100%"
                         h="100%"
+                        fallbackSrc="/placeholder-image.png"
                       />
                     </Box>
                     <VStack 
                       align="start" 
                       p={4} 
                       spacing={2}
-                      h="120px"
                     >
                       <Heading 
-                        size="sm"
+                        size="sm" 
                         color="white"
                         noOfLines={2}
                       >
                         {content.title}
                       </Heading>
                       <Text 
-                        fontSize="sm"
+                        fontSize="sm" 
                         color="gray.300"
                         noOfLines={2}
-                        lineHeight="1.5"
                       >
                         {content.description}
                       </Text>
-                      <HStack 
-                        spacing={2}
-                        color="cyan.300"
-                        _hover={{ color: "cyan.400" }}
-                        mt="auto"
-                      >
-                        <Text fontSize="sm">詳しく見る</Text>
-                        <Icon as={FaArrowRight} />
-                      </HStack>
                     </VStack>
                   </Box>
                 </Link>
@@ -231,7 +240,11 @@ const AICapabilitySection: React.FC<AICapabilitySectionProps> = ({
             ))}
           </Slider>
         </Box>
-      </Box>
+      ) : (
+        <Text color="gray.400" textAlign="center">
+          このカテゴリのコンテンツはまだありません
+        </Text>
+      )}
     </Box>
   );
 };
