@@ -155,8 +155,15 @@ export default function AICapabilitiesPage() {
         console.log('Invalid category format for capability:', cap);
         return false;
       }
-      const matches = cap.category.includes(category);
-      console.log(`Matches category ${category}:`, matches);
+      
+      // カテゴリの内部値を取得して比較
+      const matches = cap.category.some(cat => {
+        const internalCat = cat.split('（')[0].trim();
+        console.log('Comparing:', internalCat, 'with', category);
+        return internalCat === category;
+      });
+      
+      console.log(`Matches for ${cap.title}:`, matches);
       return matches;
     });
 
