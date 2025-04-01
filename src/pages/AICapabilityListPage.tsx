@@ -17,6 +17,7 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Grid,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Link as RouterLink } from 'react-router-dom';
@@ -670,31 +671,65 @@ export default function AICapabilityListPage() {
       </InputGroup>
 
       {/* 3カラムグリッドレイアウト */}
-      <SimpleGrid 
-        columns={{ base: 1, md: 2, lg: 3 }} 
-        spacing={8}
+      <Grid
+        templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
+        gap={8}
         px={4}
       >
-        {aiCapabilityGroups.map((group) => (
-          <Box 
-            key={group.id}
-            bg="rgba(0, 184, 212, 0.05)"
-            borderRadius="lg"
-            overflow="hidden"
-            borderWidth="1px"
-            borderColor="rgba(0, 184, 212, 0.3)"
-          >
-            <Box p={6}>
-              <Heading size="md" mb={3} color="cyan.400">
-                {group.title}
-              </Heading>
-              <Text color="gray.300" fontSize="sm">
-                {group.description}
-              </Text>
-            </Box>
-          </Box>
+        {/* 列ごとにグループを分ける */}
+        {[0, 1, 2].map(columnIndex => (
+          <VStack key={columnIndex} spacing={8} align="stretch">
+            {aiCapabilityGroups
+              .filter((_, index) => index % 3 === columnIndex)
+              .map((group) => (
+                <Accordion key={group.id} allowToggle>
+                  <AccordionItem 
+                    border="none"
+                    bg="rgba(0, 184, 212, 0.05)"
+                    borderRadius="lg"
+                    overflow="hidden"
+                    borderWidth="1px"
+                    borderColor="rgba(0, 184, 212, 0.3)"
+                  >
+                    <AccordionButton 
+                      p={0} 
+                      _hover={{ bg: 'transparent' }}
+                      _expanded={{ bg: 'transparent' }}
+                    >
+                      <Box p={6} width="100%">
+                        <Heading size="md" mb={3} color="cyan.400">
+                          {group.title}
+                        </Heading>
+                        <Text color="gray.300" fontSize="sm">
+                          {group.description}
+                        </Text>
+                      </Box>
+                    </AccordionButton>
+                    <AccordionPanel pb={4} bg="rgba(0, 184, 212, 0.02)">
+                      <VStack align="stretch" spacing={3}>
+                        {capabilities
+                          .filter(cap => matchesCategory(cap, group.categories))
+                          .map(cap => (
+                            <Box 
+                              key={cap.id}
+                              p={3}
+                              borderRadius="md"
+                              bg="rgba(0, 184, 212, 0.03)"
+                            >
+                              <Text fontSize="sm" color="gray.300">
+                                {cap.title}
+                              </Text>
+                            </Box>
+                          ))
+                        }
+                      </VStack>
+                    </AccordionPanel>
+                  </AccordionItem>
+                </Accordion>
+              ))}
+          </VStack>
         ))}
-      </SimpleGrid>
+      </Grid>
     </Container>
   );
 }
