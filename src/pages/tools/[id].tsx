@@ -11,7 +11,11 @@ import {
   Wrap,
   WrapItem,
   VStack,
-  useBreakpointValue
+  useBreakpointValue,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel
 } from '@chakra-ui/react';
 import { getCapabilityById } from '../../lib/api/capabilities';
 import Slider from 'react-slick';
@@ -151,15 +155,18 @@ export default function AICapabilityDetail() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!id) return;
+      if (!id) {
+        console.log('No ID provided');
+        return;
+      }
+      console.log('Current ID:', id);
       try {
+        console.log('Attempting to fetch data for ID:', id);
         const data = await getCapabilityById(id);
-        console.log('Fetched capability data:', data); // データ確認用
-        console.log('Related capabilities:', data.relatedCapabilities); // 関連AI機能確認用
-        console.log('Related cases:', data.relatedCases); // 関連事例確認用
+        console.log('API Response:', data);
         setCapability(data);
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error in fetchData:', error);
       } finally {
         setLoading(false);
       }
@@ -170,13 +177,20 @@ export default function AICapabilityDetail() {
 
   if (loading) return (
     <Container maxW="1200px" py={12}>
-      <Box textAlign="center" color="white">Loading...</Box>
+      <Box textAlign="center" color="white">
+        <Text>Loading...</Text>
+        <Text>ID: {id}</Text>
+      </Box>
     </Container>
   );
   
   if (!capability) return (
     <Container maxW="1200px" py={12}>
-      <Box textAlign="center" color="white">Not found</Box>
+      <Box textAlign="center" color="white">
+        <Text>Not found</Text>
+        <Text>ID: {id}</Text>
+        <Text>Please check the console for errors</Text>
+      </Box>
     </Container>
   );
 
@@ -445,6 +459,78 @@ export default function AICapabilityDetail() {
           </Box>
         </Box>
       )}
+
+      <Grid
+        templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
+        gap={8}
+        px={4}
+      >
+        {[0, 1, 2].map(columnIndex => (
+          <VStack key={columnIndex} spacing={8} align="stretch">
+            {aiCapabilityGroups
+              .filter((_, index) => index % 3 === columnIndex)
+              .map((group) => (
+                <Accordion key={group.id} allowToggle>
+                  <AccordionItem 
+                    border="none"
+                    bg="rgba(0, 184, 212, 0.05)"
+                    borderRadius="lg"
+                    overflow="hidden"
+                    borderWidth="1px"
+                    borderColor="rgba(0, 184, 212, 0.3)"
+                  >
+                    <AccordionButton 
+                      p={0} 
+                      _hover={{ bg: 'transparent' }}
+                      _expanded={{ bg: 'transparent' }}
+                    >
+                      <Box p={6} width="100%">
+                        <Heading size="md" mb={3} color="cyan.400">
+                          {group.title}
+                        </Heading>
+                        <Text color="gray.300" fontSize="sm">
+                          {group.description}
+                        </Text>
+                      </Box>
+                    </AccordionButton>
+                    <AccordionPanel pb={4} bg="rgba(0, 184, 212, 0.02)">
+                      <VStack align="stretch" spacing={3}>
+                        {capabilities
+                          .filter(cap => matchesCategory(cap, group.categories))
+                          .map(cap => (
+                            <Link 
+                              key={cap.id}
+                              to={`/tools/${cap.id}`}
+                              style={{ textDecoration: 'none' }}
+                            >
+                              <Box 
+                                p={3}
+                                borderRadius="md"
+                                bg="rgba(0, 184, 212, 0.03)"
+                                _hover={{
+                                  bg: "rgba(0, 184, 212, 0.08)",
+                                  transform: "translateY(-1px)",
+                                  transition: "all 0.2s"
+                                }}
+                              >
+                                <Text fontSize="sm" color="gray.300">
+                                  {cap.title}
+                                </Text>
+                                <Text fontSize="xs" color="gray.400" mt={1}>
+                                  {cap.description}
+                                </Text>
+                              </Box>
+                            </Link>
+                          ))
+                        }
+                      </VStack>
+                    </AccordionPanel>
+                  </AccordionItem>
+                </Accordion>
+              ))}
+          </VStack>
+        ))}
+      </Grid>
     </Container>
   );
 } 

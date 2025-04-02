@@ -9,8 +9,7 @@ export const getCapabilities = async () => {
       endpoint: 'capabilities',
       queries: { 
         limit: 100,
-        orders: '-publishedAt',
-        fields: ['id', 'title', 'description', 'category', 'technologies', 'thumbnail', 'detail']
+        orders: '-publishedAt'
       }
     });
     
@@ -19,6 +18,8 @@ export const getCapabilities = async () => {
     if (!response || !response.contents || response.contents.length === 0) {
       console.warn('No contents found in the response');
     }
+
+    console.log('Sample capability ID:', response.contents[0]?.id);
 
     return response.contents;
   } catch (error) {
@@ -29,18 +30,28 @@ export const getCapabilities = async () => {
 
 export const getCapabilityById = async (id: string) => {
   try {
+    console.log('Making API request for ID:', id);
+    console.log('Endpoint:', 'capabilities');
+    
     const response = await client.get<AICapabilityResponse>({
       endpoint: 'capabilities',
       contentId: id,
     });
     
+    console.log('Raw API Response:', response);
+    
     if (!response) {
+      console.log('No response received');
       throw new Error('No capability found');
     }
     
     return response;
   } catch (error) {
-    console.error('Error fetching capability:', error);
-    throw new Error(`Failed to fetch capability: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error('Detailed error in getCapabilityById:', {
+      error,
+      id,
+      endpoint: 'capabilities'
+    });
+    throw error;
   }
 };

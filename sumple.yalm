@@ -603,18 +603,10 @@ const matchCategory = (cmsCategory: string, groupCategory: string): boolean => {
 };
 
 // 改善されたマッチング関数
-const matchesCategory = (capability, groupCategories) => {
-  if (!capability.category || capability.category.length === 0) return false;
-  
-  return capability.category.some(cmsCat => {
-    // カテゴリから基本部分（日本語カッコの前）を抽出
-    const baseCategory = typeof cmsCat === 'string' ? cmsCat.split('（')[0].trim() : '';
-    
-    // groupCategoriesの各カテゴリと比較
-    return groupCategories.some(groupCat => 
-      cmsCat === groupCat || baseCategory === groupCat
-    );
-  });
+const matchesCategory = (capability: AICapability, groupCategories: string[]) => {
+  return capability.category.some(cmsCat => 
+    groupCategories.some(groupCat => matchCategory(cmsCat, groupCat))
+  );
 };
 
 export default function AICapabilityListPage() {
