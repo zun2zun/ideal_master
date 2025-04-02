@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Heading, Text } from '@chakra-ui/react';
+import { Box, Container, Heading, Text, Link } from '@chakra-ui/react';
 import { getCapabilities } from '../lib/api/capabilities';
 import { AICapability } from '../types/capability';
 import AICapabilitySection from '../components/ai-capabilities/AICapabilitySection';
@@ -107,23 +107,12 @@ export default function AICapabilitiesPage() {
       try {
         console.log('Starting to fetch capabilities...');
         const data = await getCapabilities();
-        console.log('Received data:', data);
-
-        // データが配列の場合は直接使用
-        if (Array.isArray(data)) {
-          console.log('Setting capabilities array:', data);
-          setCapabilities(data);
-        } 
-        // データがresponseオブジェクトの場合はcontentsを使用
-        else if (data && data.contents) {
-          console.log('Setting capabilities from contents:', data.contents);
-          setCapabilities(data.contents);
-        }
-        // それ以外の場合はエラー
-        else {
-          console.error('Invalid data format:', data);
-          setError('データの形式が不正です');
-        }
+        console.log('CMS Data Structure:', data.map(item => ({
+          id: item.id,
+          title: item.title,
+          url: `/tools/${item.id}`  // 生成されるURLを確認
+        })));
+        setCapabilities(data);
       } catch (error) {
         console.error('Fetch error:', error);
         setError(`データの取得に失敗しました: ${error instanceof Error ? error.message : '不明なエラー'}`);
@@ -142,17 +131,28 @@ export default function AICapabilitiesPage() {
 
   const filterByCategory = (category: string) => {
     const filtered = capabilities.filter(cap => {
+      // フィルタリング前のデータを確認
+      console.log('Checking capability:', {
+        id: cap.id,
+        title: cap.title,
+        category: cap.category
+      });
+
       const matches = cap.category.some(cat => {
         const internalCat = cat.split('（')[0].trim();
         return internalCat === category;
       });
+
+      // マッチしたデータを確認
+      if (matches) {
+        console.log('Matched:', {
+          id: cap.id,
+          generatedUrl: `/tools/${cap.id}`
+        });
+      }
+
       return matches;
     });
-    
-    // デバッグ用ログ
-    console.log(`=== ${category} ===`);
-    console.log('Filtered count:', filtered.length);
-    console.log('Filtered items:', filtered.map(item => item.title));
     
     return filtered;
   };
@@ -206,6 +206,26 @@ export default function AICapabilitiesPage() {
           challenge={CATEGORY_INFO[category].challenge}
           contents={filterByCategory(category)}
         />
+      ))}
+
+      {capabilities.map(cap => (
+        <Link 
+          key={cap.id}
+          to={`/tools/${cap.id}`}
+          onClick={() => {
+            console.log('Clicked link:', {
+              id: cap.id,
+              url: `/tools/${cap.id}`,
+              currentPath: window.location.pathname
+            });
+          }}
+          style={{ textDecoration: 'none' }}
+        >
+          <Box>
+            <Text>{cap.title}</Text>
+            <Text>{cap.description}</Text>
+          </Box>
+        </Link>
       ))}
     </Container>
   );

@@ -720,33 +720,49 @@ export default function AICapabilityListPage() {
                     <AccordionPanel pb={4} bg="rgba(0, 184, 212, 0.02)">
                       <VStack align="stretch" spacing={3}>
                         {capabilities
-                          .filter(cap => matchesCategory(cap, group.categories))
-                          .map(cap => (
-                            <Link 
-                              key={cap.id}
-                              to={`/tools/${cap.id}`}
-                              onClick={() => console.log('Navigating to:', `/tools/${cap.id}`)}
-                              style={{ textDecoration: 'none' }}
-                            >
-                              <Box 
-                                p={3}
-                                borderRadius="md"
-                                bg="rgba(0, 184, 212, 0.03)"
-                                _hover={{
-                                  bg: "rgba(0, 184, 212, 0.08)",
-                                  transform: "translateY(-1px)",
-                                  transition: "all 0.2s"
+                          .filter(cap => {
+                            console.log('Filtering capability:', cap);  // フィルタリング時のデータを確認
+                            return matchesCategory(cap, group.categories);
+                          })
+                          .map(cap => {
+                            console.log('Creating link for:', {  // リンク生成時のデータを確認
+                              id: cap.id,
+                              title: cap.title,
+                              url: `/tools/${cap.id}`
+                            });
+                            return (
+                              <RouterLink 
+                                key={cap.id}
+                                to={`/tools/${cap.id}`}
+                                onClick={() => {
+                                  console.log('Clicked link:', {
+                                    id: cap.id,
+                                    url: `/tools/${cap.id}`,
+                                    currentPath: window.location.pathname
+                                  });
                                 }}
+                                style={{ textDecoration: 'none' }}
                               >
-                                <Text fontSize="sm" color="gray.300">
-                                  {cap.title}
-                                </Text>
-                                <Text fontSize="xs" color="gray.400" mt={1}>
-                                  {cap.description}
-                                </Text>
-                              </Box>
-                            </Link>
-                          ))
+                                <Box 
+                                  p={3}
+                                  borderRadius="md"
+                                  bg="rgba(0, 184, 212, 0.03)"
+                                  _hover={{
+                                    bg: "rgba(0, 184, 212, 0.08)",
+                                    transform: "translateY(-1px)",
+                                    transition: "all 0.2s"
+                                  }}
+                                >
+                                  <Text fontSize="sm" color="gray.300">
+                                    {cap.title}
+                                  </Text>
+                                  <Text fontSize="xs" color="gray.400" mt={1}>
+                                    {cap.description}
+                                  </Text>
+                                </Box>
+                              </RouterLink>
+                            );
+                          })
                         }
                       </VStack>
                     </AccordionPanel>

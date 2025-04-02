@@ -175,7 +175,7 @@ const AICapabilitySection: React.FC<AICapabilitySectionProps> = ({
           <Slider {...sliderSettings}>
             {contents.map((content) => (
               <Box key={content.id} px={2}>
-                <Link to={`/capabilities/${content.id}`}>
+                <Link to={`/tools/${content.id}`}>
                   <Box
                     bg="rgba(0, 184, 212, 0.05)"
                     borderRadius="lg"
