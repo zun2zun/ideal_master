@@ -744,28 +744,57 @@ export default function AICapabilityListPage() {
                                 <Box 
                                   p={4}
                                   borderRadius="md"
-                                  bg="rgba(0, 184, 212, 0.03)"
-                                  height="140px"
+                                  bg="rgba(75, 0, 130, 0.2)"
+                                  height="110px"
                                   display="flex"
                                   flexDirection="column"
-                                  justifyContent="space-between"
+                                  border="1px solid rgba(138, 43, 226, 0.2)"
+                                  transition="all 0.3s ease"
+                                  position="relative"
+                                  overflow="hidden"
                                   _hover={{
-                                    bg: "rgba(0, 184, 212, 0.08)",
-                                    transform: "translateY(-1px)",
-                                    transition: "all 0.2s"
+                                    bg: "rgba(75, 0, 130, 0.3)",
+                                    transform: "translateY(-2px)",
+                                    boxShadow: "0 4px 12px rgba(138, 43, 226, 0.15)",
+                                    borderColor: "rgba(138, 43, 226, 0.4)",
+                                    "&::after": {
+                                      content: '""',
+                                      position: "absolute",
+                                      top: "-50%",
+                                      left: "-50%",
+                                      width: "200%",
+                                      height: "200%",
+                                      background: "linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 48%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 52%, transparent 55%)",
+                                      transform: "rotate(45deg)",
+                                      animation: "shine 1.5s ease-in-out",
+                                    }
+                                  }}
+                                  sx={{
+                                    "@keyframes shine": {
+                                      "0%": {
+                                        transform: "translateX(-100%) rotate(45deg)",
+                                      },
+                                      "100%": {
+                                        transform: "translateX(100%) rotate(45deg)",
+                                      }
+                                    }
                                   }}
                                 >
                                   <Text 
                                     fontSize="sm" 
-                                    color="gray.300"
-                                    mb={2}
+                                    color="cyan.300"
+                                    fontWeight="bold"
+                                    noOfLines={1}
+                                    mb={3}
                                   >
                                     {cap.title}
                                   </Text>
                                   
                                   <Text 
                                     fontSize="xs" 
-                                    color="gray.400"
+                                    color="gray.200"
+                                    lineHeight="1.4"
+                                    noOfLines={2}
                                   >
                                     {cap.description}
                                   </Text>
