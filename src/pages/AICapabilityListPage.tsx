@@ -724,13 +724,13 @@ export default function AICapabilityListPage() {
                           fontSize="sm"
                           noOfLines={2}  // 2行に制限
                         >
-                          {group.description}
-                        </Text>
-                      </Box>
-                    </AccordionButton>
+                    {group.description}
+                  </Text>
+                </Box>
+              </AccordionButton>
                     <AccordionPanel pb={4} bg="rgba(0, 184, 212, 0.02)">
                       <VStack align="stretch" spacing={4}>
-                        {capabilities
+                {capabilities
                           .filter(cap => {
                             return matchesCategory(cap, group.categories);
                           })
@@ -780,15 +780,30 @@ export default function AICapabilityListPage() {
                                     }
                                   }}
                                 >
-                                  <Text 
-                                    fontSize="sm" 
-                                    color="cyan.300"
-                                    fontWeight="bold"
-                                    noOfLines={1}
-                                    mb={3}
-                                  >
-                                    {cap.title}
-                                  </Text>
+                                  <HStack spacing={2} mb={3} alignItems="center">
+                                    <Text 
+                                      fontSize="sm" 
+                                      color="cyan.300"
+                                      fontWeight="bold"
+                                      noOfLines={1}
+                                      flex="1"
+                                    >
+                                      {cap.title}
+                                    </Text>
+                                    {cap.category && cap.category[0] && (
+                                      <Tag
+                                        size="sm"
+                                        variant="solid"
+                                        colorScheme="orange"
+                                        px={2}
+                                        py={1}
+                                        borderRadius="full"
+                                        flexShrink={0}
+                                      >
+                                        {getCategoryDisplayName(cap.category[0])}
+                                      </Tag>
+                                    )}
+                                  </HStack>
                                   
                                   <Text 
                                     fontSize="xs" 
@@ -796,15 +811,15 @@ export default function AICapabilityListPage() {
                                     lineHeight="1.4"
                                     noOfLines={2}
                                   >
-                                    {cap.description}
-                                  </Text>
-                                </Box>
+                        {cap.description}
+                      </Text>
+                    </Box>
                               </RouterLink>
                             );
                           })}
                       </VStack>
-                    </AccordionPanel>
-                  </AccordionItem>
+            </AccordionPanel>
+          </AccordionItem>
                 </Accordion>
               ))}
           </VStack>
