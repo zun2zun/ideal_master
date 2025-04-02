@@ -617,28 +617,124 @@ const matchesCategory = (capability, groupCategories) => {
   });
 };
 
+// 記事とグループのマッチング用インターフェース
+interface MatchResult {
+  score: number;
+  matchedKeywords: string[];
+}
+
+// グループと詳細記事のマッピング関数を改善
+const matchCapabilitiesToGroups = (capabilities: AICapability[], groups: AICapabilityGroup[]) => {
+  const groupedCapabilities = groups.map(group => {
+    // キーワードベースでマッチング
+    const matchedCapabilities = capabilities.filter(cap => {
+      const matchResult = calculateMatchScore(cap, group);
+      // スコアが一定以上の場合にマッチとみなす
+      return matchResult.score >= 0.3; // 閾値は調整可能
+    });
+
+    return {
+      ...group,
+      capabilities: matchedCapabilities
+    };
+  });
+
+  return groupedCapabilities;
+};
+
+// マッチングスコアを計算する関数
+const calculateMatchScore = (cap: AICapability, group: AICapabilityGroup): MatchResult => {
+  let score = 0;
+  const matchedKeywords: string[] = [];
+
+  // キーワードによるマッチング（最も重視）
+  group.keywords.forEach(keyword => {
+    const keywordLower = keyword.toLowerCase();
+    if (
+      cap.title.toLowerCase().includes(keywordLower) ||
+      cap.description.toLowerCase().includes(keywordLower)
+    ) {
+      score += 0.4;
+      matchedKeywords.push(keyword);
+    }
+  });
+
+  // タイトルの類似性チェック
+  const titleWords = group.title.toLowerCase().split(/[\s,、。]+/);
+  titleWords.forEach(word => {
+    if (
+      cap.title.toLowerCase().includes(word) ||
+      cap.description.toLowerCase().includes(word)
+    ) {
+      score += 0.3;
+      matchedKeywords.push(word);
+    }
+  });
+
+  // カテゴリによるマッチング（補助的に使用）
+  if (matchesCategory(cap, group.categories)) {
+    score += 0.2;
+  }
+
+  return {
+    score,
+    matchedKeywords: [...new Set(matchedKeywords)] // 重複を除去
+  };
+};
+
+// 未マッチの記事を取得する関数（将来的なタイトル追加のため）
+const getUnmatchedCapabilities = (
+  capabilities: AICapability[], 
+  groupedCapabilities: AICapabilityGroup[]
+): AICapability[] => {
+  const allMatchedIds = new Set(
+    groupedCapabilities.flatMap(group => 
+      group.capabilities.map(cap => cap.id)
+    )
+  );
+
+  return capabilities.filter(cap => !allMatchedIds.has(cap.id));
+};
+
 export default function AICapabilityListPage() {
+  // 初期値を空配列に設定
   const [capabilities, setCapabilities] = useState<AICapability[]>([]);
+  const [groupedCapabilities, setGroupedCapabilities] = useState(aiCapabilityGroups.map(group => ({
+    ...group,
+    capabilities: []
+  })));
+  const [unmatchedCapabilities, setUnmatchedCapabilities] = useState<AICapability[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCapabilities = async () => {
+      console.log('Starting to fetch capabilities...'); // デバッグログ
       try {
-        console.log('Fetching capabilities...');
+        setLoading(true);
+        setError(null);
+        
+        // 初期グループ化データを設定
+        setGroupedCapabilities(aiCapabilityGroups.map(group => ({
+          ...group,
+          capabilities: []
+        })));
+
         const data = await getCapabilities();
-        console.log('Fetched data:', data); // データの中身を確認
-        console.log('Data length:', data?.length); // 配列の長さを確認
+        console.log('Received data:', data); // デバッグログ
+
         if (Array.isArray(data)) {
           setCapabilities(data);
-          console.log('Capabilities set:', data); // stateに設定されたデータを確認
+          const grouped = matchCapabilitiesToGroups(data, aiCapabilityGroups);
+          setGroupedCapabilities(grouped);
+          console.log('Grouped capabilities:', grouped); // デバッグログ
         } else {
-          console.error('Invalid data format:', data);
-          setError('データの形式が不正です');
+          console.error('Data is not an array:', data); // デバッグログ
+          setError('データの形式が正しくありません');
         }
       } catch (err) {
         console.error('Error in fetchCapabilities:', err);
-        setError('データの取得に失敗しました');
+        setError('データの取得中にエラーが発生しました');
       } finally {
         setLoading(false);
       }
@@ -647,184 +743,166 @@ export default function AICapabilityListPage() {
     fetchCapabilities();
   }, []);
 
-  if (loading) return <Box p={8}>Loading...</Box>;
-  if (error) return <Box p={8} color="red.500">{error}</Box>;
-
+  // レンダリング部分
   return (
     <Container maxW="1400px" py={12}>
-      <Box mb={12} textAlign="center">
-        <Heading size="2xl" mb={6}>
-          AIでできること
-        </Heading>
-        <Text fontSize="lg" color="gray.300" mb={8}>
-          あなたのビジネスをサポートするAIの機能をご紹介します
-        </Text>
-      </Box>
+      {loading ? (
+        <Box textAlign="center">
+          <Text>データを読み込んでいます...</Text>
+        </Box>
+      ) : error ? (
+        <Box textAlign="center" color="red.500">
+          <Text>{error}</Text>
+        </Box>
+      ) : (
+        <>
+          <Box mb={12} textAlign="center">
+            <Heading size="2xl" mb={6}>
+              AIでできること
+            </Heading>
+            <Text fontSize="lg" color="gray.300" mb={8}>
+              あなたのビジネスをサポートするAIの機能をご紹介します
+            </Text>
+          </Box>
 
-      {/* 検索ボックス */}
-      <InputGroup maxW="600px" mx="auto" mb={8}>
-        <InputLeftElement pointerEvents="none">
-          <SearchIcon color="gray.300" />
-        </InputLeftElement>
-        <Input
-          placeholder="例：顧客管理、文書作成、翻訳..."
-          onChange={(e) => {
-            const searchQuery = e.target.value.toLowerCase();
-            const filtered = capabilities.filter(cap => 
-              cap.title.toLowerCase().includes(searchQuery) ||
-              cap.description.toLowerCase().includes(searchQuery) ||
-              (cap.category && cap.category.some(cat => 
-                getCategoryDisplayName(cat).toLowerCase().includes(searchQuery)
-              ))
-            );
-            setCapabilities(filtered);
-          }}
-        />
-      </InputGroup>
-
-      {/* 3カラムグリッドレイアウト */}
-      <Grid
-        templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
-        gap={8}
-        px={4}
-      >
-        {/* 列ごとにグループを分ける */}
-        {[0, 1, 2].map(columnIndex => (
-          <VStack key={columnIndex} spacing={8} align="stretch">
-            {aiCapabilityGroups
-              .filter((_, index) => index % 3 === columnIndex)
-              .map((group) => (
-                <Accordion key={group.id} allowToggle>
-                  <AccordionItem 
-                    border="none"
-                    bg="rgba(0, 184, 212, 0.05)"
-                    borderRadius="lg"
-                    overflow="hidden"
-                    borderWidth="1px"
-                    borderColor="rgba(0, 184, 212, 0.3)"
-                  >
-                    <AccordionButton 
-                      p={0} 
-                      _hover={{ bg: 'transparent' }}
-                      _expanded={{ bg: 'transparent' }}
-                    >
-                      <Box 
-                        p={6} 
-                        width="100%" 
-                        height="140px"  // 固定の高さを設定
-                        display="flex"
-                        flexDirection="column"
-                        justifyContent="space-between"
+          <Grid
+            templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
+            gap={8}
+            px={4}
+          >
+            {[0, 1, 2].map(columnIndex => (
+              <VStack key={columnIndex} spacing={8} align="stretch">
+                {groupedCapabilities
+                  .filter((_, index) => index % 3 === columnIndex)
+                  .map((group) => (
+                    <Accordion key={group.id} allowToggle>
+                      <AccordionItem 
+                        border="none"
+                        bg="rgba(0, 184, 212, 0.05)"
+                        borderRadius="lg"
+                        overflow="hidden"
+                        borderWidth="1px"
+                        borderColor="rgba(0, 184, 212, 0.3)"
                       >
-                        <Heading size="md" mb={3} color="cyan.400">
-                          {group.title}
-                        </Heading>
-                        <Text 
-                          color="gray.300" 
-                          fontSize="sm"
-                          noOfLines={2}  // 2行に制限
+                        <AccordionButton 
+                          p={0} 
+                          _hover={{ bg: 'transparent' }}
+                          _expanded={{ bg: 'transparent' }}
                         >
-                    {group.description}
-                  </Text>
-                </Box>
-              </AccordionButton>
-                    <AccordionPanel pb={4} bg="rgba(0, 184, 212, 0.02)">
-                      <VStack align="stretch" spacing={4}>
-                {capabilities
-                          .filter(cap => {
-                            return matchesCategory(cap, group.categories);
-                          })
-                          .map(cap => {
-                            return (
-                              <RouterLink 
-                                key={cap.id}
-                                to={`/tools/${cap.id}`}
-                                style={{ textDecoration: 'none' }}
-                              >
-                                <Box 
-                                  p={4}
-                                  borderRadius="md"
-                                  bg="rgba(75, 0, 130, 0.2)"
-                                  height="110px"
-                                  display="flex"
-                                  flexDirection="column"
-                                  border="1px solid rgba(138, 43, 226, 0.2)"
-                                  transition="all 0.3s ease"
-                                  position="relative"
-                                  overflow="hidden"
-                                  _hover={{
-                                    bg: "rgba(75, 0, 130, 0.3)",
-                                    transform: "translateY(-2px)",
-                                    boxShadow: "0 4px 12px rgba(138, 43, 226, 0.15)",
-                                    borderColor: "rgba(138, 43, 226, 0.4)",
-                                    "&::after": {
-                                      content: '""',
-                                      position: "absolute",
-                                      top: "-50%",
-                                      left: "-50%",
-                                      width: "200%",
-                                      height: "200%",
-                                      background: "linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 48%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 52%, transparent 55%)",
-                                      transform: "rotate(45deg)",
-                                      animation: "shine 1.5s ease-in-out",
-                                    }
-                                  }}
-                                  sx={{
-                                    "@keyframes shine": {
-                                      "0%": {
-                                        transform: "translateX(-100%) rotate(45deg)",
-                                      },
-                                      "100%": {
-                                        transform: "translateX(100%) rotate(45deg)",
-                                      }
-                                    }
-                                  }}
+                          <Box 
+                            p={6} 
+                            width="100%" 
+                            height="140px"  // 固定の高さを設定
+                            display="flex"
+                            flexDirection="column"
+                            justifyContent="space-between"
+                          >
+                            <Heading size="md" mb={3} color="cyan.400">
+                              {group.title}
+                            </Heading>
+                            <Text 
+                              color="gray.300" 
+                              fontSize="sm"
+                              noOfLines={2}  // 2行に制限
+                            >
+                              {group.description}
+                            </Text>
+                          </Box>
+                        </AccordionButton>
+                        <AccordionPanel pb={4} bg="rgba(0, 184, 212, 0.02)">
+                          <VStack align="stretch" spacing={4}>
+                            {group.capabilities.map(cap => {
+                              return (
+                                <RouterLink 
+                                  key={cap.id}
+                                  to={`/tools/${cap.id}`}
+                                  style={{ textDecoration: 'none' }}
                                 >
-                                  <HStack spacing={2} mb={3} alignItems="center">
-                                    <Text 
-                                      fontSize="sm" 
-                                      color="cyan.300"
-                                      fontWeight="bold"
-                                      noOfLines={1}
-                                      flex="1"
-                                    >
-                                      {cap.title}
-                                    </Text>
-                                    {cap.category && cap.category[0] && (
-                                      <Tag
-                                        size="sm"
-                                        variant="solid"
-                                        colorScheme="orange"
-                                        px={2}
-                                        py={1}
-                                        borderRadius="full"
-                                        flexShrink={0}
-                                      >
-                                        {getCategoryDisplayName(cap.category[0])}
-                                      </Tag>
-                                    )}
-                                  </HStack>
-                                  
-                                  <Text 
-                                    fontSize="xs" 
-                                    color="gray.200"
-                                    lineHeight="1.4"
-                                    noOfLines={2}
+                                  <Box 
+                                    p={4}
+                                    borderRadius="md"
+                                    bg="rgba(75, 0, 130, 0.2)"
+                                    height="110px"
+                                    display="flex"
+                                    flexDirection="column"
+                                    border="1px solid rgba(138, 43, 226, 0.2)"
+                                    transition="all 0.3s ease"
+                                    position="relative"
+                                    overflow="hidden"
+                                    _hover={{
+                                      bg: "rgba(75, 0, 130, 0.3)",
+                                      transform: "translateY(-2px)",
+                                      boxShadow: "0 4px 12px rgba(138, 43, 226, 0.15)",
+                                      borderColor: "rgba(138, 43, 226, 0.4)",
+                                      "&::after": {
+                                        content: '""',
+                                        position: "absolute",
+                                        top: "-50%",
+                                        left: "-50%",
+                                        width: "200%",
+                                        height: "200%",
+                                        background: "linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 48%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 52%, transparent 55%)",
+                                        transform: "rotate(45deg)",
+                                        animation: "shine 1.5s ease-in-out",
+                                      }
+                                    }}
+                                    sx={{
+                                      "@keyframes shine": {
+                                        "0%": {
+                                          transform: "translateX(-100%) rotate(45deg)",
+                                        },
+                                        "100%": {
+                                          transform: "translateX(100%) rotate(45deg)",
+                                        }
+                                      }
+                                    }}
                                   >
-                        {cap.description}
-                      </Text>
-                    </Box>
-                              </RouterLink>
-                            );
-                          })}
-                      </VStack>
-            </AccordionPanel>
-          </AccordionItem>
-                </Accordion>
-              ))}
-          </VStack>
-        ))}
-      </Grid>
+                                    <HStack spacing={2} mb={3} alignItems="center">
+                                      <Text 
+                                        fontSize="sm" 
+                                        color="cyan.300"
+                                        fontWeight="bold"
+                                        noOfLines={1}
+                                        flex="1"
+                                      >
+                                        {cap.title}
+                                      </Text>
+                                      {cap.category && cap.category[0] && (
+                                        <Tag
+                                          size="sm"
+                                          variant="solid"
+                                          colorScheme="orange"
+                                          px={2}
+                                          py={1}
+                                          borderRadius="full"
+                                          flexShrink={0}
+                                        >
+                                          {getCategoryDisplayName(cap.category[0])}
+                                        </Tag>
+                                      )}
+                                    </HStack>
+                                    <Text 
+                                      fontSize="xs" 
+                                      color="gray.200"
+                                      lineHeight="1.4"
+                                      noOfLines={2}
+                                    >
+                                      {cap.description}
+                                    </Text>
+                                  </Box>
+                                </RouterLink>
+                              );
+                            })}
+                          </VStack>
+                        </AccordionPanel>
+                      </AccordionItem>
+                    </Accordion>
+                  ))}
+              </VStack>
+            ))}
+          </Grid>
+        </>
+      )}
     </Container>
   );
 }
