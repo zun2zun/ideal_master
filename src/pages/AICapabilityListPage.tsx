@@ -708,62 +708,71 @@ export default function AICapabilityListPage() {
                       _hover={{ bg: 'transparent' }}
                       _expanded={{ bg: 'transparent' }}
                     >
-                      <Box p={6} width="100%">
+                      <Box 
+                        p={6} 
+                        width="100%" 
+                        height="140px"  // 固定の高さを設定
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="space-between"
+                      >
                         <Heading size="md" mb={3} color="cyan.400">
                           {group.title}
                         </Heading>
-                        <Text color="gray.300" fontSize="sm">
+                        <Text 
+                          color="gray.300" 
+                          fontSize="sm"
+                          noOfLines={2}  // 2行に制限
+                        >
                           {group.description}
                         </Text>
                       </Box>
                     </AccordionButton>
                     <AccordionPanel pb={4} bg="rgba(0, 184, 212, 0.02)">
-                      <VStack align="stretch" spacing={3}>
+                      <VStack align="stretch" spacing={4}>
                         {capabilities
                           .filter(cap => {
-                            console.log('Filtering capability:', cap);  // フィルタリング時のデータを確認
                             return matchesCategory(cap, group.categories);
                           })
                           .map(cap => {
-                            console.log('Creating link for:', {  // リンク生成時のデータを確認
-                              id: cap.id,
-                              title: cap.title,
-                              url: `/tools/${cap.id}`
-                            });
                             return (
                               <RouterLink 
                                 key={cap.id}
                                 to={`/tools/${cap.id}`}
-                                onClick={() => {
-                                  console.log('Clicked link:', {
-                                    id: cap.id,
-                                    url: `/tools/${cap.id}`,
-                                    currentPath: window.location.pathname
-                                  });
-                                }}
                                 style={{ textDecoration: 'none' }}
                               >
                                 <Box 
-                                  p={3}
+                                  p={4}
                                   borderRadius="md"
                                   bg="rgba(0, 184, 212, 0.03)"
+                                  height="140px"
+                                  display="flex"
+                                  flexDirection="column"
+                                  justifyContent="space-between"
                                   _hover={{
                                     bg: "rgba(0, 184, 212, 0.08)",
                                     transform: "translateY(-1px)",
                                     transition: "all 0.2s"
                                   }}
                                 >
-                                  <Text fontSize="sm" color="gray.300">
+                                  <Text 
+                                    fontSize="sm" 
+                                    color="gray.300"
+                                    mb={2}
+                                  >
                                     {cap.title}
                                   </Text>
-                                  <Text fontSize="xs" color="gray.400" mt={1}>
+                                  
+                                  <Text 
+                                    fontSize="xs" 
+                                    color="gray.400"
+                                  >
                                     {cap.description}
                                   </Text>
                                 </Box>
                               </RouterLink>
                             );
-                          })
-                        }
+                          })}
                       </VStack>
                     </AccordionPanel>
                   </AccordionItem>
