@@ -56,6 +56,7 @@ interface Capability {
   gallery?: GalleryImage[];
   relatedCapabilities?: RelatedCapability[];
   relatedCases?: any[];
+  difficultyLevel?: number; // 1-5の値を想定
 }
 
 // アニメーションスタイルの定義
@@ -205,7 +206,7 @@ const DifficultyAndOverviewSection = ({ capability }: { capability: AICapability
                 <Heading size="md" color="yellow.400">開発難易度</Heading>
               </HStack>
               <HStack justify="center" mt={2}>
-                {renderStars(3)}
+                {renderStars(capability.difficultyLevel || 3)}
               </HStack>
             </VStack>
           </CardHeader>
@@ -405,14 +406,23 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
             <VStack align="start" spacing={2} w="full">
               <Heading size="md" color="cyan.400">開発難易度</Heading>
               <HStack spacing={1}>
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Icon 
-                    key={star} 
-                    as={FaStar} 
-                    boxSize={6}
-                    color={star <= 3 ? "yellow.400" : "gray.600"} 
-                  />
-                ))}
+                {Array.from({ length: 5 }).map((_, index) => {
+                  // HTMLから★の数を抽出する
+                  const difficultyMatch = capability.detail01?.match(/★/g);
+                  const difficultyLevel = difficultyMatch ? difficultyMatch.length : 2;
+                  
+                  return (
+                    <Icon 
+                      key={index}
+                      as={FaStar}
+                      boxSize={6}
+                      sx={{
+                        color: index < difficultyLevel ? "#FFB400" : "#4A5568",
+                        transition: "color 0.2s"
+                      }}
+                    />
+                  );
+                })}
               </HStack>
             </VStack>
 
