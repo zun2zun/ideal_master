@@ -23,6 +23,7 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Image,
 } from '@chakra-ui/react';
 import { MdBusinessCenter, MdWork, MdTrendingUp, MdTaskAlt, MdBuild, MdAttachMoney } from 'react-icons/md';
 import { FaStar, FaLightbulb, FaChartLine, FaBullseye, FaUsers } from 'react-icons/fa';
@@ -389,6 +390,54 @@ const ScenarioItem: React.FC<{ title: string; description: string }> = ({ title,
   </Box>
 );
 
+// 関連記事カルーセルコンポーネント
+const RelatedArticlesCarousel = ({ relatedCapabilities }: { relatedCapabilities?: RelatedCapability[] }) => {
+  if (!relatedCapabilities || relatedCapabilities.length === 0) {
+    return null;  // 関連記事がない場合は何も表示しない
+  }
+
+  return (
+    <Box mb={12}>
+      <Heading as="h2" size="xl" mb={8} textAlign="center">関連記事</Heading>
+      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+        {relatedCapabilities.map((article) => (
+          <Box
+            key={article.id}
+            bg="whiteAlpha.50"
+            rounded="lg"
+            overflow="hidden"
+            borderWidth="1px"
+            borderColor="whiteAlpha.200"
+            transition="all 0.3s"
+            _hover={{
+              transform: "translateY(-4px)",
+              boxShadow: "lg"
+            }}
+          >
+            {article.thumbnail && (
+              <Box h="200px" overflow="hidden">
+                <Image
+                  src={article.thumbnail.url}
+                  alt={article.title}
+                  objectFit="cover"
+                  w="full"
+                  h="full"
+                />
+              </Box>
+            )}
+            <Box p={4}>
+              <Heading size="md" color="cyan.400" mb={2}>
+                {article.title}
+              </Heading>
+              {/* 必要に応じて追加の情報を表示 */}
+            </Box>
+          </Box>
+        ))}
+      </SimpleGrid>
+    </Box>
+  );
+};
+
 const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
   return (
     <VStack spacing={8} align="stretch" w="full">
@@ -459,7 +508,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
 
       {/* 関連情報と課題のセクション */}
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-        <Accordion allowToggle defaultIndex={[0]} width="full">
+        <Accordion allowToggle defaultIndex={[]} width="full">
           {/* 関連業種 */}
           <AccordionCustomItem
             icon={MdBusinessCenter}
@@ -491,7 +540,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
           </AccordionCustomItem>
         </Accordion>
 
-        <Accordion allowToggle defaultIndex={[0]} width="full">
+        <Accordion allowToggle defaultIndex={[]} width="full">
           {/* 関連職種 */}
           <AccordionCustomItem
             icon={MdWork}
@@ -523,7 +572,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
           </AccordionCustomItem>
         </Accordion>
 
-        <Accordion allowToggle defaultIndex={[0]} width="full">
+        <Accordion allowToggle defaultIndex={[]} width="full">
           {/* 解決できる課題 */}
           <AccordionCustomItem
             icon={MdTaskAlt}
@@ -964,6 +1013,9 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
         <Heading size="md" color="cyan.400" mb={4}>まとめ</Heading>
         <RichTextContent html={capability.detail13 || ""} />
       </Box>
+
+      {/* 関連記事セクションを追加 */}
+      <RelatedArticlesCarousel relatedCapabilities={capability.relatedCapabilities} />
     </VStack>
   );
 };
@@ -999,55 +1051,53 @@ export default function ToolDetail() {
   if (!capability) return <Box p={4}>データが見つかりません</Box>;
 
   return (
-    <ChakraProvider>
-      <Container maxW="1200px" py={12}>
-        {/* ヘッダー */}
-        <Box mb={16} textAlign="center">
-          <Heading 
-            size="2xl"
-            mb={6}
-            bgGradient="linear(to-r, cyan.400, blue.500)"
-            bgClip="text"
-          >
-            {capability.title}
-          </Heading>
+    <Container maxW="1200px" py={12}>
+      {/* ヘッダー */}
+      <Box mb={16} textAlign="center">
+        <Heading 
+          size="2xl"
+          mb={6}
+          bgGradient="linear(to-r, cyan.400, blue.500)"
+          bgClip="text"
+        >
+          {capability.title}
+        </Heading>
 
-          {/* カテゴリ */}
-          <Wrap spacing={2} mb={4} justify="center">
-            {capability.category?.map((cat) => (
-              <WrapItem key={cat}>
-                <Tag 
-                  size="md"
-                  bg="rgba(255, 146, 3, 0.7)"
-                  color="white"
-                  fontWeight="bold"
-                >
-                  {cat}
-                </Tag>
-              </WrapItem>
-            ))}
-          </Wrap>
+        {/* カテゴリ */}
+        <Wrap spacing={2} mb={4} justify="center">
+          {capability.category?.map((cat) => (
+            <WrapItem key={cat}>
+              <Tag 
+                size="md"
+                bg="rgba(255, 146, 3, 0.7)"
+                color="white"
+                fontWeight="bold"
+              >
+                {cat}
+              </Tag>
+            </WrapItem>
+          ))}
+        </Wrap>
 
-          {/* 使用AI */}
-          <Wrap spacing={2} mb={6} justify="center">
-            {capability.technologies?.map((tech) => (
-              <WrapItem key={tech}>
-                <Tag 
-                  size="md"
-                  bg="rgba(0, 184, 212, 0.15)"
-                  color="cyan.300"
-                  fontWeight="medium"
-                >
-                  {tech}
-                </Tag>
-              </WrapItem>
-            ))}
-          </Wrap>
-        </Box>
+        {/* 使用AI */}
+        <Wrap spacing={2} mb={6} justify="center">
+          {capability.technologies?.map((tech) => (
+            <WrapItem key={tech}>
+              <Tag 
+                size="md"
+                bg="rgba(0, 184, 212, 0.15)"
+                color="cyan.300"
+                fontWeight="medium"
+              >
+                {tech}
+              </Tag>
+            </WrapItem>
+          ))}
+        </Wrap>
+      </Box>
 
-        {/* 詳細コンテンツ */}
-        <DetailContent capability={capability} />
-      </Container>
-    </ChakraProvider>
+      {/* 詳細コンテンツ */}
+      <DetailContent capability={capability} />
+    </Container>
   );
 } 
