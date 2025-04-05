@@ -23,7 +23,7 @@ import { MdBusinessCenter, MdWork, MdTrendingUp } from 'react-icons/md';
 import { getCapabilityById } from '@/lib/api/capabilities';
 import { AICapability } from '@/types/capability';
 import theme from '@/lib/theme';
-import { FaStar } from 'react-icons/fa';
+import { FaStar, FaLightbulb, FaChartLine, FaBullseye, FaUsers, FaSearchDollar } from 'react-icons/fa';
 
 interface Capability {
   id: string;
@@ -279,6 +279,32 @@ const RoleItem: React.FC<{ role: string; description: string }> = ({ role, descr
   </VStack>
 );
 
+// 活用シーンと効果のアイテムコンポーネント
+const ScenarioItem: React.FC<{ title: string; description: string }> = ({ title, description }) => (
+  <Box
+    p={4}
+    bg="whiteAlpha.100"
+    rounded="md"
+    _hover={{
+      bg: "whiteAlpha.200",
+      transform: "translateX(4px)",
+      transition: "all 0.2s"
+    }}
+  >
+    <VStack align="start" spacing={2}>
+      <HStack spacing={2}>
+        <Icon as={FaLightbulb} color="cyan.300" />
+        <Text color="cyan.300" fontWeight="bold">
+          {title}
+        </Text>
+      </HStack>
+      <Text color="gray.300" fontSize="sm" pl={6}>
+        {description}
+      </Text>
+    </VStack>
+  </Box>
+);
+
 const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
   return (
     <VStack spacing={8} align="stretch" w="full">
@@ -515,13 +541,159 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
 
       {/* 活用と効果のセクション */}
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-        <Box p={6} bg="whiteAlpha.50" rounded="lg" borderWidth="1px" borderColor="whiteAlpha.200">
-          <Heading size="md" color="cyan.400" mb={4}>活用シーン</Heading>
-          <RichTextContent html={capability.detail07 || ""} />
+        {/* 活用シーン */}
+        <Box
+          position="relative"
+          p={6}
+          rounded="lg"
+          bg="whiteAlpha.50"
+          borderWidth="1px"
+          borderColor="whiteAlpha.200"
+        >
+          <VStack align="start" spacing={6}>
+            <Heading 
+              size="md" 
+              color="cyan.400"
+              pb={2}
+              borderBottom="2px"
+              borderColor="cyan.400"
+              w="full"
+            >
+              活用シーン
+            </Heading>
+            
+            <VStack align="stretch" spacing={3} w="full">
+              <ScenarioItem
+                title="製品カタログの自動生成"
+                description="複数の製品情報から一貫性のある説明文を効率的に作成"
+              />
+              <ScenarioItem
+                title="マーケティング資料の作成"
+                description="技術仕様を顧客メリットに変換した訴求力の高い資料を作成"
+              />
+              <ScenarioItem
+                title="Webサイトのコンテンツ制作"
+                description="SEO対策を考慮しつつ、魅力的な製品紹介ページを作成"
+              />
+              <ScenarioItem
+                title="セールス資料の最適化"
+                description="顧客のニーズに合わせた提案資料のカスタマイズ"
+              />
+            </VStack>
+          </VStack>
         </Box>
-        <Box p={6} bg="whiteAlpha.50" rounded="lg" borderWidth="1px" borderColor="whiteAlpha.200">
-          <Heading size="md" color="cyan.400" mb={4}>期待できる効果</Heading>
-          <RichTextContent html={capability.detail08 || ""} />
+
+        {/* 期待できる効果 */}
+        <Box
+          position="relative"
+          p={6}
+          rounded="lg"
+          bg="whiteAlpha.50"
+          borderWidth="1px"
+          borderColor="whiteAlpha.200"
+        >
+          <VStack align="start" spacing={6}>
+            <Heading 
+              size="md" 
+              color="cyan.400"
+              pb={2}
+              borderBottom="2px"
+              borderColor="cyan.400"
+              w="full"
+            >
+              期待できる効果
+            </Heading>
+            
+            <VStack align="stretch" spacing={3} w="full">
+              <Box
+                p={4}
+                bg="whiteAlpha.100"
+                rounded="md"
+                position="relative"
+                _hover={{
+                  bg: "whiteAlpha.200",
+                  transform: "translateX(4px)",
+                  transition: "all 0.2s"
+                }}
+              >
+                <HStack spacing={3} mb={2}>
+                  <Icon as={FaChartLine} color="green.400" boxSize={5} />
+                  <Text color="green.400" fontWeight="bold">
+                    作業効率の向上
+                  </Text>
+                </HStack>
+                <Text color="gray.300" fontSize="sm" pl={8}>
+                  製品説明の作成時間を最大70%削減
+                </Text>
+              </Box>
+
+              <Box
+                p={4}
+                bg="whiteAlpha.100"
+                rounded="md"
+                position="relative"
+                _hover={{
+                  bg: "whiteAlpha.200",
+                  transform: "translateX(4px)",
+                  transition: "all 0.2s"
+                }}
+              >
+                <HStack spacing={3} mb={2}>
+                  <Icon as={FaBullseye} color="orange.400" boxSize={5} />
+                  <Text color="orange.400" fontWeight="bold">
+                    品質の向上
+                  </Text>
+                </HStack>
+                <Text color="gray.300" fontSize="sm" pl={8}>
+                  一貫性のある高品質な製品説明を実現
+                </Text>
+              </Box>
+
+              <Box
+                p={4}
+                bg="whiteAlpha.100"
+                rounded="md"
+                position="relative"
+                _hover={{
+                  bg: "whiteAlpha.200",
+                  transform: "translateX(4px)",
+                  transition: "all 0.2s"
+                }}
+              >
+                <HStack spacing={3} mb={2}>
+                  <Icon as={FaUsers} color="blue.400" boxSize={5} />
+                  <Text color="blue.400" fontWeight="bold">
+                    顧客理解の促進
+                  </Text>
+                </HStack>
+                <Text color="gray.300" fontSize="sm" pl={8}>
+                  技術的な特徴を顧客メリットとして分かりやすく説明
+                </Text>
+              </Box>
+
+              <Box
+                p={4}
+                bg="whiteAlpha.100"
+                rounded="md"
+                position="relative"
+                _hover={{
+                  bg: "whiteAlpha.200",
+                  transform: "translateX(4px)",
+                  transition: "all 0.2s"
+                }}
+              >
+                <HStack spacing={3} mb={2}>
+                  <Icon as={FaSearchDollar} color="purple.400" boxSize={5} />
+                  <Text color="purple.400" fontWeight="bold">
+                    コスト削減
+                  </Text>
+                </HStack>
+                <Text color="gray.300" fontSize="sm" pl={8}>
+                  外部委託コストの削減と社内リソースの効率的な活用
+                </Text>
+              </Box>
+            </VStack>
+          </VStack>
         </Box>
       </SimpleGrid>
 
