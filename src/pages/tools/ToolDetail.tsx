@@ -760,64 +760,90 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
             background: "linear-gradient(90deg, cyan.400, blue.500)",
           }}
         >
-          <VStack align="start" spacing={6}>
+          {/* タイトル部分（1カラム） */}
+          <VStack align="start" spacing={6} w="full">
             <HStack spacing={3}>
               <Icon as={MdBuild} color="cyan.400" boxSize={6} />
               <Heading size="md" color="cyan.400">おすすめツール</Heading>
             </HStack>
             
-            <VStack align="stretch" spacing={4} w="full">
+            {/* AIツール一覧（3カラム） */}
+            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4} w="full">
               {/* OpenAI GPT-4 */}
               <Box
                 p={4}
                 bg="whiteAlpha.100"
-                rounded="md"
+                rounded="lg"
+                borderWidth="1px"
+                borderColor="whiteAlpha.200"
                 transition="all 0.3s"
-                _hover={{ transform: "translateX(4px)", bg: "whiteAlpha.200" }}
+                _hover={{ 
+                  transform: "translateY(-4px)",
+                  boxShadow: "lg",
+                  bg: "whiteAlpha.200"
+                }}
               >
-                <HStack spacing={3} mb={2}>
-                  <Icon as={FaStar} color="yellow.400" />
-                  <Text color="cyan.300" fontWeight="bold">OpenAI GPT-4</Text>
-                </HStack>
-                <Text color="gray.300" pl={7}>
-                  製品の技術特性と顧客価値の関連付けに優れ、文脈理解力が高いため、一貫性のある説明文を生成できます。カスタムプロンプトでブランドボイスの調整も可能です。
-                </Text>
+                <VStack align="start" spacing={3}>
+                  <HStack spacing={3}>
+                    <Icon as={FaStar} color="yellow.400" boxSize={5} />
+                    <Text color="cyan.300" fontWeight="bold">OpenAI GPT-4</Text>
+                  </HStack>
+                  <Text color="gray.300" fontSize="sm">
+                    製品の技術特性と顧客価値の関連付けに優れ、文脈理解力が高いため、一貫性のある説明文を生成できます。カスタムプロンプトでブランドボイスの調整も可能です。
+                  </Text>
+                </VStack>
               </Box>
 
               {/* Copy.ai */}
               <Box
                 p={4}
                 bg="whiteAlpha.100"
-                rounded="md"
+                rounded="lg"
+                borderWidth="1px"
+                borderColor="whiteAlpha.200"
                 transition="all 0.3s"
-                _hover={{ transform: "translateX(4px)", bg: "whiteAlpha.200" }}
+                _hover={{ 
+                  transform: "translateY(-4px)",
+                  boxShadow: "lg",
+                  bg: "whiteAlpha.200"
+                }}
               >
-                <HStack spacing={3} mb={2}>
-                  <Icon as={FaStar} color="yellow.400" />
-                  <Text color="cyan.300" fontWeight="bold">Copy.ai</Text>
-                </HStack>
-                <Text color="gray.300" pl={7}>
-                  マーケティングコピー特化型のAIツールで、製品説明に特化したテンプレートが豊富。簡単な入力から多様な表現バリエーションを生成できます。
-                </Text>
+                <VStack align="start" spacing={3}>
+                  <HStack spacing={3}>
+                    <Icon as={FaStar} color="yellow.400" boxSize={5} />
+                    <Text color="cyan.300" fontWeight="bold">Copy.ai</Text>
+                  </HStack>
+                  <Text color="gray.300" fontSize="sm">
+                    マーケティングコピー特化型のAIツールで、製品説明に特化したテンプレートが豊富。簡単な入力から多様な表現バリエーションを生成できます。
+                  </Text>
+                </VStack>
               </Box>
 
               {/* Jasper */}
               <Box
                 p={4}
                 bg="whiteAlpha.100"
-                rounded="md"
+                rounded="lg"
+                borderWidth="1px"
+                borderColor="whiteAlpha.200"
                 transition="all 0.3s"
-                _hover={{ transform: "translateX(4px)", bg: "whiteAlpha.200" }}
+                _hover={{ 
+                  transform: "translateY(-4px)",
+                  boxShadow: "lg",
+                  bg: "whiteAlpha.200"
+                }}
               >
-                <HStack spacing={3} mb={2}>
-                  <Icon as={FaStar} color="yellow.400" />
-                  <Text color="cyan.300" fontWeight="bold">Jasper</Text>
-                </HStack>
-                <Text color="gray.300" pl={7}>
-                  ECサイト向けの商品説明に強みがあり、SEO最適化された製品説明文の生成に適しています。他のマーケティングコンテンツとの連携も容易です。
-                </Text>
+                <VStack align="start" spacing={3}>
+                  <HStack spacing={3}>
+                    <Icon as={FaStar} color="yellow.400" boxSize={5} />
+                    <Text color="cyan.300" fontWeight="bold">Jasper</Text>
+                  </HStack>
+                  <Text color="gray.300" fontSize="sm">
+                    ECサイト向けの商品説明に強みがあり、SEO最適化された製品説明文の生成に適しています。他のマーケティングコンテンツとの連携も容易です。
+                  </Text>
+                </VStack>
               </Box>
-            </VStack>
+            </SimpleGrid>
           </VStack>
         </Box>
 
