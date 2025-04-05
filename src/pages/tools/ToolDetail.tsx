@@ -208,22 +208,51 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
     <VStack spacing={8} align="stretch" w="full">
       {/* 開発難易度と概要のセクション */}
       <Grid templateColumns={{ base: "1fr", md: "350px 1fr" }} gap={6}>
-        <Box p={6} bg="whiteAlpha.50" rounded="lg" borderWidth="1px" borderColor="whiteAlpha.200">
+        {/* 開発難易度：立体的なカード */}
+        <Box
+          p={6}
+          bg="whiteAlpha.50"
+          rounded="lg"
+          position="relative"
+          borderWidth="1px"
+          borderColor="whiteAlpha.200"
+        >
           <VStack align="start" spacing={4}>
-            <Heading size="md" color="cyan.400">開発難易度</Heading>
-            <HStack spacing={1}>
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Icon 
-                  key={star} 
-                  as={FaStar} 
-                  color={star <= 3 ? "yellow.400" : "gray.600"} 
-                />
-              ))}
-            </HStack>
-            <RichTextContent html={capability.detail01 || ""} />
+            {/* 星評価を横並びに */}
+            <Box mb={4}>
+              <Heading size="md" color="cyan.400" mb={2}>開発難易度</Heading>
+              <HStack spacing={1}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Icon 
+                    key={star} 
+                    as={FaStar} 
+                    boxSize={6}  // サイズを大きく
+                    color={star <= 3 ? "yellow.400" : "gray.600"} 
+                  />
+                ))}
+              </HStack>
+            </Box>
+            
+            {/* 必要なスキルなどのリスト */}
+            <VStack align="start" spacing={3} w="full">
+              <Text color="gray.100">必要な技術スキル: マークアップ言語の基礎知識、API連携の基本（オプション）</Text>
+              <Text color="gray.100">連携システム: ECサイト、製品カタログシステム、CMS（任意）</Text>
+              <Text color="gray.100">主な開発工程: AIツールの選定、プロンプト設計、品質評価プロセスの確立</Text>
+              <Text color="gray.100">開発期間目安: 1〜2週間程度</Text>
+            </VStack>
           </VStack>
         </Box>
-        <Box p={6} bg="whiteAlpha.50" rounded="lg" borderWidth="1px" borderColor="whiteAlpha.200">
+        
+        {/* 概要：ガラスモーフィズム風 */}
+        <Box
+          p={6}
+          bg="rgba(255, 255, 255, 0.05)"
+          backdropFilter="blur(10px)"
+          borderWidth="1px"
+          borderColor="whiteAlpha.200"
+          rounded="lg"
+          boxShadow="0 8px 32px 0 rgba(31, 38, 135, 0.37)"
+        >
           <Heading size="md" color="cyan.400" mb={4}>概要</Heading>
           <RichTextContent html={capability.detail02 || ""} />
         </Box>
@@ -231,18 +260,74 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
 
       {/* 関連情報と課題のセクション（3カラム） */}
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-        <Box p={6} bg="whiteAlpha.50" rounded="lg" borderWidth="1px" borderColor="whiteAlpha.200">
-          <Heading size="md" color="cyan.400" mb={4}>関連業種</Heading>
-          <RichTextContent html={capability.detail03 || ""} />
-        </Box>
-        <Box p={6} bg="whiteAlpha.50" rounded="lg" borderWidth="1px" borderColor="whiteAlpha.200">
-          <Heading size="md" color="cyan.400" mb={4}>関連職種</Heading>
-          <RichTextContent html={capability.detail04 || ""} />
-        </Box>
-        <Box p={6} bg="whiteAlpha.50" rounded="lg" borderWidth="1px" borderColor="whiteAlpha.200">
-          <Heading size="md" color="cyan.400" mb={4}>解決できる課題</Heading>
-          <RichTextContent html={capability.detail05 || ""} />
-        </Box>
+        {[
+          {
+            title: "関連業種",
+            content: [
+              "マーケティング担当者：製品訴求力の向上と作業時間の削減",
+              "製品マネージャー：製品価値の明確な言語化と市場反応の改善",
+              "コピーライター：アイデア出しと表現のバリエーション拡大",
+              "ECサイト運営者：製品説明の質と量の両立による売上向上",
+              "ブランドマネージャー：一貫したブランドボイスの維持と拡張"
+            ]
+          },
+          {
+            title: "関連職種",
+            content: [
+              "EC・小売業：製品説明ページのコンバージョン率向上に直結",
+              "メーカー：技術的特性を顧客メリットに変換する際の壁を解消",
+              "SaaS企業：複雑な機能を分かりやすく顧客価値として伝達",
+              "スタートアップ：限られたリソースで効果的な製品訴求を実現",
+              "広告・マーケティング：クライアント製品の価値を明確に表現"
+            ]
+          },
+          {
+            title: "解決できる課題",
+            content: [
+              "課題1: 製品の機能と顧客メリットを効果的に結びつけられない",
+              "課題2: 多数の製品説明を作成する時間と人的リソースが不足している",
+              "課題3: 表現のマンネリ化や業界用語の乱用で顧客に伝わらない",
+              "規模感の目安:",
+              "• 月間製品説明作成数：10件以上",
+              "• 1件あたりの作成時間：30分以上",
+              "• コンテンツ作成担当：1〜3名程度"
+            ]
+          }
+        ].map((item, index) => (
+          <Box
+            key={index}
+            position="relative"
+            p={6}
+            rounded="lg"
+            bg="whiteAlpha.50"
+            _before={{
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              borderRadius: "lg",
+              padding: "1px",
+              background: "linear-gradient(45deg, cyan.400, blue.500)",
+              WebkitMask: 
+                "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              WebkitMaskComposite: "xor",
+              maskComposite: "exclude"
+            }}
+            _hover={{
+              transform: "translateY(-2px)",
+              transition: "all 0.2s"
+            }}
+          >
+            <Heading size="md" color="cyan.400" mb={4}>{item.title}</Heading>
+            <VStack align="start" spacing={3}>
+              {Array.isArray(item.content) && item.content.map((text, i) => (
+                <Text key={i} color="gray.100">{text}</Text>
+              ))}
+            </VStack>
+          </Box>
+        ))}
       </SimpleGrid>
 
       {/* 課題の詳細解説（1カラム） */}
