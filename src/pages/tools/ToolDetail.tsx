@@ -229,8 +229,8 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
         </Box>
       </Grid>
 
-      {/* 関連情報のセクション */}
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+      {/* 関連情報と課題のセクション（3カラム） */}
+      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
         <Box p={6} bg="whiteAlpha.50" rounded="lg" borderWidth="1px" borderColor="whiteAlpha.200">
           <Heading size="md" color="cyan.400" mb={4}>関連業種</Heading>
           <RichTextContent html={capability.detail03 || ""} />
@@ -239,19 +239,17 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
           <Heading size="md" color="cyan.400" mb={4}>関連職種</Heading>
           <RichTextContent html={capability.detail04 || ""} />
         </Box>
-      </SimpleGrid>
-
-      {/* 課題と解決のセクション */}
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
         <Box p={6} bg="whiteAlpha.50" rounded="lg" borderWidth="1px" borderColor="whiteAlpha.200">
           <Heading size="md" color="cyan.400" mb={4}>解決できる課題</Heading>
           <RichTextContent html={capability.detail05 || ""} />
         </Box>
-        <Box p={6} bg="whiteAlpha.50" rounded="lg" borderWidth="1px" borderColor="whiteAlpha.200">
-          <Heading size="md" color="cyan.400" mb={4}>課題の詳細解説</Heading>
-          <RichTextContent html={capability.detail06 || ""} />
-        </Box>
       </SimpleGrid>
+
+      {/* 課題の詳細解説（1カラム） */}
+      <Box p={6} bg="whiteAlpha.50" rounded="lg" borderWidth="1px" borderColor="whiteAlpha.200">
+        <Heading size="md" color="cyan.400" mb={4}>課題の詳細解説</Heading>
+        <RichTextContent html={capability.detail06 || ""} />
+      </Box>
 
       {/* 活用と効果のセクション */}
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
