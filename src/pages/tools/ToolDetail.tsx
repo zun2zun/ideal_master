@@ -17,13 +17,18 @@ import {
   Grid,
   useBreakpointValue,
   Wrap,
-  WrapItem
+  WrapItem,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from '@chakra-ui/react';
-import { MdBusinessCenter, MdWork, MdTrendingUp } from 'react-icons/md';
+import { MdBusinessCenter, MdWork, MdTrendingUp, MdTaskAlt } from 'react-icons/md';
 import { getCapabilityById } from '@/lib/api/capabilities';
 import { AICapability } from '@/types/capability';
-import theme from '@/lib/theme';
 import { FaStar, FaLightbulb, FaChartLine, FaBullseye, FaUsers, FaSearchDollar } from 'react-icons/fa';
+import { IconType } from 'react-icons';
 
 interface Capability {
   id: string;
@@ -52,6 +57,84 @@ interface Capability {
   relatedCapabilities?: RelatedCapability[];
   relatedCases?: any[];
 }
+
+// アニメーションスタイルの定義
+const animations = {
+  styles: {
+    global: {
+      "@keyframes pulse": {
+        "0%": { transform: "scale(1)" },
+        "50%": { transform: "scale(1.02)" },
+        "100%": { transform: "scale(1)" }
+      },
+      "@keyframes flash": {
+        "0%": { boxShadow: "0 0 0 0 rgba(255, 146, 3, 0.4)" },
+        "70%": { boxShadow: "0 0 0 10px rgba(255, 146, 3, 0)" },
+        "100%": { boxShadow: "0 0 0 0 rgba(255, 146, 3, 0)" }
+      }
+    }
+  }
+};
+
+// アコーディオンアイテムのコンポーネント
+interface AccordionCustomItemProps {
+  icon: IconType;
+  title: string;
+  color: string;
+  children: React.ReactNode;
+}
+
+const AccordionCustomItem: React.FC<AccordionCustomItemProps> = ({
+  icon,
+  title,
+  color,
+  children
+}) => {
+  return (
+    <AccordionItem 
+      border="none" 
+      bg="whiteAlpha.50" 
+      rounded="lg"
+      borderWidth="1px"
+      borderColor="whiteAlpha.200"
+      position="relative"
+      transition="all 0.3s"
+      _hover={{
+        transform: "translateY(-2px)",
+        boxShadow: `0 0 20px ${color}33`
+      }}
+    >
+      <AccordionButton 
+        p={4}
+        _hover={{ bg: 'whiteAlpha.100' }}
+        rounded="lg"
+      >
+        <HStack flex="1" spacing={4}>
+          <Icon 
+            as={icon} 
+            color={color} 
+            boxSize={6} 
+          />
+          <Heading 
+            size="md" 
+            color={color}
+            textShadow="0 0 10px rgba(255, 255, 255, 0.3)"
+            _hover={{
+              transform: "scale(1.05)",
+              transition: "transform 0.2s"
+            }}
+          >
+            {title}
+          </Heading>
+        </HStack>
+        <AccordionIcon color={color} boxSize={6} />
+      </AccordionButton>
+      <AccordionPanel pb={4}>
+        {children}
+      </AccordionPanel>
+    </AccordionItem>
+  );
+};
 
 const RelatedInfoSection = ({ capability }: { capability: AICapability }) => {
   return (
@@ -366,28 +449,14 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
 
       {/* 関連情報と課題のセクション */}
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-        {/* 関連業種 */}
-        <Box
-          position="relative"
-          p={6}
-          rounded="lg"
-          bg="whiteAlpha.50"
-          borderWidth="1px"
-          borderColor="whiteAlpha.200"
-        >
-          <VStack align="start" spacing={6}>
-            <Heading 
-              size="md" 
-              color="cyan.400"
-              pb={2}
-              borderBottom="2px"
-              borderColor="cyan.400"
-              w="full"
-            >
-              関連業種
-            </Heading>
-            
-            <VStack align="stretch" spacing={3} w="full">
+        <Accordion allowToggle defaultIndex={[0]} width="full">
+          {/* 関連業種 */}
+          <AccordionCustomItem
+            icon={MdBusinessCenter}
+            title="関連業種"
+            color="orange.400"
+          >
+            <VStack align="stretch" spacing={3}>
               <RoleItem
                 role="マーケティング担当者"
                 description="製品訴求力の向上と作業時間の削減"
@@ -409,31 +478,17 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
                 description="一貫したブランドボイスの維持と拡張"
               />
             </VStack>
-          </VStack>
-        </Box>
+          </AccordionCustomItem>
+        </Accordion>
 
-        {/* 関連職種 */}
-        <Box
-          position="relative"
-          p={6}
-          rounded="lg"
-          bg="whiteAlpha.50"
-          borderWidth="1px"
-          borderColor="whiteAlpha.200"
-        >
-          <VStack align="start" spacing={6}>
-            <Heading 
-              size="md" 
-              color="cyan.400"
-              pb={2}
-              borderBottom="2px"
-              borderColor="cyan.400"
-              w="full"
-            >
-              関連職種
-            </Heading>
-            
-            <VStack align="stretch" spacing={3} w="full">
+        <Accordion allowToggle defaultIndex={[0]} width="full">
+          {/* 関連職種 */}
+          <AccordionCustomItem
+            icon={MdWork}
+            title="関連職種"
+            color="yellow.400"
+          >
+            <VStack align="stretch" spacing={3}>
               <RoleItem
                 role="EC・小売業"
                 description="製品説明ページのコンバージョン率向上に直結"
@@ -455,31 +510,17 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
                 description="クライアント製品の価値を明確に表現"
               />
             </VStack>
-          </VStack>
-        </Box>
+          </AccordionCustomItem>
+        </Accordion>
 
-        {/* 解決できる課題 */}
-        <Box
-          position="relative"
-          p={6}
-          rounded="lg"
-          bg="whiteAlpha.50"
-          borderWidth="1px"
-          borderColor="whiteAlpha.200"
-        >
-          <VStack align="start" spacing={6}>
-            <Heading 
-              size="md" 
-              color="cyan.400"
-              pb={2}
-              borderBottom="2px"
-              borderColor="cyan.400"
-              w="full"
-            >
-              解決できる課題
-            </Heading>
-            
-            <VStack align="stretch" spacing={4} w="full">
+        <Accordion allowToggle defaultIndex={[0]} width="full">
+          {/* 解決できる課題 */}
+          <AccordionCustomItem
+            icon={MdTaskAlt}
+            title="解決できる課題"
+            color="pink.400"
+          >
+            <VStack align="stretch" spacing={4}>
               {/* 課題リスト */}
               <VStack align="start" spacing={3}>
                 {[
@@ -529,8 +570,8 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
                 </VStack>
               </Box>
             </VStack>
-          </VStack>
-        </Box>
+          </AccordionCustomItem>
+        </Accordion>
       </SimpleGrid>
 
       {/* 課題の詳細解説（1カラム） */}
@@ -761,7 +802,7 @@ export default function ToolDetail() {
   if (!capability) return <Box p={4}>データが見つかりません</Box>;
 
   return (
-    <ChakraProvider theme={theme}>
+    <ChakraProvider>
       <Container maxW="1200px" py={12}>
         {/* ヘッダー */}
         <Box mb={16} textAlign="center">
