@@ -11,10 +11,17 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
+    port: 3003,
     open: true,
     headers: {
       "Content-Security-Policy": "script-src 'self' 'unsafe-eval' 'unsafe-inline';"
+    },
+    proxy: {
+      '/api': {
+        target: `https://${process.env.VITE_MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1`,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
     }
   },
   envPrefix: 'VITE_'

@@ -21,7 +21,7 @@ import NFTServicePage from './pages/services/NFTServicePage'
 import StudyAbroadConsultingServicePage from './pages/services/StudyAbroadConsultingServicePage'
 import WebDevelopmentServicePage from './pages/services/WebDevelopmentServicePage'
 import AICapabilitiesPage from './pages/AICapabilitiesPage'
-import AICapabilityDetail from './pages/tools/[id]'
+import ToolDetail from './pages/tools/ToolDetail'
 import AICapabilityListPage from './pages/AICapabilityListPage'
 import NotFoundPage from './pages/NotFoundPage'
 
@@ -49,7 +49,7 @@ const App: React.FC = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/capabilities" element={<AICapabilitiesPage />} />
-          <Route path="/tools/:id" element={<AICapabilityDetail />} />
+          <Route path="/tools/:id" element={<ToolDetail />} />
           <Route path="/ai-list" element={<AICapabilityListPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

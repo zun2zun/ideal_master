@@ -1,5 +1,5 @@
 import { client } from './client';
-import { AICapabilityResponse } from '../../types/capability';
+import { AICapabilityResponse, SingleAICapabilityResponse } from '../../types/capability';
 
 export const getCapabilities = async () => {
   try {
@@ -28,12 +28,12 @@ export const getCapabilities = async () => {
   }
 };
 
-export const getCapabilityById = async (id: string) => {
+export const getCapabilityById = async (id: string): Promise<SingleAICapabilityResponse> => {
   try {
     console.log('Making API request for ID:', id);
     console.log('Endpoint:', 'capabilities');
     
-    const response = await client.get<AICapabilityResponse>({
+    const response = await client.get<SingleAICapabilityResponse>({
       endpoint: 'capabilities',
       contentId: id,
     });
