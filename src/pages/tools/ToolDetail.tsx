@@ -203,12 +203,87 @@ const RichTextContent: React.FC<{ html: string }> = ({ html }) => {
   );
 };
 
+// 必要なコンポーネントを先に定義
+const LabeledContent: React.FC<{ label: string; content: string }> = ({ label, content }) => (
+  <VStack align="start" spacing={1}>
+    <Text color="cyan.400" fontSize="sm" fontWeight="bold">{label}</Text>
+    <Text color="gray.100">{content}</Text>
+  </VStack>
+);
+
+// カスタムリストアイテムコンポーネント
+const CustomListItem: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <HStack 
+    align="start" 
+    spacing={3}
+    _hover={{ transform: "translateX(4px)", transition: "all 0.2s" }}
+  >
+    <Box 
+      as="span" 
+      color="cyan.400" 
+      fontSize="lg"
+      mt={1}
+    >
+      •
+    </Box>
+    <Text 
+      color="gray.100" 
+      fontSize="md" 
+      lineHeight="tall"
+    >
+      {children}
+    </Text>
+  </HStack>
+);
+
+// メトリクスアイテムコンポーネント（規模感の目安用）
+const MetricsItem: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <Text 
+    color="cyan.200" 
+    fontSize="sm" 
+    pl={6}
+    borderLeft="2px"
+    borderColor="cyan.400"
+  >
+    {children}
+  </Text>
+);
+
+// 役割や職種を表示するためのカスタムコンポーネント
+const RoleItem: React.FC<{ role: string; description: string }> = ({ role, description }) => (
+  <VStack 
+    align="start" 
+    spacing={1}
+    p={3}
+    bg="whiteAlpha.100"
+    rounded="md"
+    _hover={{
+      bg: "whiteAlpha.200",
+      transform: "translateX(4px)",
+      transition: "all 0.2s"
+    }}
+  >
+    <Text 
+      color="cyan.300" 
+      fontWeight="bold"
+      fontSize="md"
+    >
+      {role}
+    </Text>
+    <Text 
+      color="gray.300" 
+      fontSize="sm"
+    >
+      {description}
+    </Text>
+  </VStack>
+);
+
 const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
   return (
     <VStack spacing={8} align="stretch" w="full">
       {/* 開発難易度と概要のセクション */}
       <Grid templateColumns={{ base: "1fr", md: "350px 1fr" }} gap={6}>
-        {/* 開発難易度：立体的なカード */}
         <Box
           p={6}
           bg="whiteAlpha.50"
@@ -217,33 +292,36 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
           borderWidth="1px"
           borderColor="whiteAlpha.200"
         >
-          <VStack align="start" spacing={4}>
-            {/* 星評価を横並びに */}
-            <Box mb={4}>
-              <Heading size="md" color="cyan.400" mb={2}>開発難易度</Heading>
+          <VStack align="start" spacing={6}>
+            <VStack align="start" spacing={2} w="full">
+              <Heading size="md" color="cyan.400">開発難易度</Heading>
               <HStack spacing={1}>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Icon 
                     key={star} 
                     as={FaStar} 
-                    boxSize={6}  // サイズを大きく
+                    boxSize={6}
                     color={star <= 3 ? "yellow.400" : "gray.600"} 
                   />
                 ))}
               </HStack>
-            </Box>
-            
-            {/* 必要なスキルなどのリスト */}
-            <VStack align="start" spacing={3} w="full">
-              <Text color="gray.100">必要な技術スキル: マークアップ言語の基礎知識、API連携の基本（オプション）</Text>
-              <Text color="gray.100">連携システム: ECサイト、製品カタログシステム、CMS（任意）</Text>
-              <Text color="gray.100">主な開発工程: AIツールの選定、プロンプト設計、品質評価プロセスの確立</Text>
-              <Text color="gray.100">開発期間目安: 1〜2週間程度</Text>
+            </VStack>
+
+            <VStack align="start" spacing={4} w="full">
+              <CustomListItem>
+                必要な技術スキル: マークアップ言語の基礎知識、API連携の基本（オプション）
+              </CustomListItem>
+              <CustomListItem>
+                連携システム: ECサイト、製品カタログシステム、CMS（任意）
+              </CustomListItem>
+              <CustomListItem>
+                開発期間目安: 1〜2週間程度
+              </CustomListItem>
             </VStack>
           </VStack>
         </Box>
         
-        {/* 概要：ガラスモーフィズム風 */}
+        {/* 概要部分 */}
         <Box
           p={6}
           bg="rgba(255, 255, 255, 0.05)"
@@ -253,81 +331,180 @@ const DetailContent: React.FC<DetailContentProps> = ({ capability }) => {
           rounded="lg"
           boxShadow="0 8px 32px 0 rgba(31, 38, 135, 0.37)"
         >
-          <Heading size="md" color="cyan.400" mb={4}>概要</Heading>
-          <RichTextContent html={capability.detail02 || ""} />
+          <VStack align="start" spacing={4}>
+            <Heading size="md" color="cyan.400">概要</Heading>
+            <RichTextContent html={capability.detail02 || ""} />
+          </VStack>
         </Box>
       </Grid>
 
-      {/* 関連情報と課題のセクション（3カラム） */}
+      {/* 関連情報と課題のセクション */}
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-        {[
-          {
-            title: "関連業種",
-            content: [
-              "マーケティング担当者：製品訴求力の向上と作業時間の削減",
-              "製品マネージャー：製品価値の明確な言語化と市場反応の改善",
-              "コピーライター：アイデア出しと表現のバリエーション拡大",
-              "ECサイト運営者：製品説明の質と量の両立による売上向上",
-              "ブランドマネージャー：一貫したブランドボイスの維持と拡張"
-            ]
-          },
-          {
-            title: "関連職種",
-            content: [
-              "EC・小売業：製品説明ページのコンバージョン率向上に直結",
-              "メーカー：技術的特性を顧客メリットに変換する際の壁を解消",
-              "SaaS企業：複雑な機能を分かりやすく顧客価値として伝達",
-              "スタートアップ：限られたリソースで効果的な製品訴求を実現",
-              "広告・マーケティング：クライアント製品の価値を明確に表現"
-            ]
-          },
-          {
-            title: "解決できる課題",
-            content: [
-              "課題1: 製品の機能と顧客メリットを効果的に結びつけられない",
-              "課題2: 多数の製品説明を作成する時間と人的リソースが不足している",
-              "課題3: 表現のマンネリ化や業界用語の乱用で顧客に伝わらない",
-              "規模感の目安:",
-              "• 月間製品説明作成数：10件以上",
-              "• 1件あたりの作成時間：30分以上",
-              "• コンテンツ作成担当：1〜3名程度"
-            ]
-          }
-        ].map((item, index) => (
-          <Box
-            key={index}
-            position="relative"
-            p={6}
-            rounded="lg"
-            bg="whiteAlpha.50"
-            _before={{
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              borderRadius: "lg",
-              padding: "1px",
-              background: "linear-gradient(45deg, cyan.400, blue.500)",
-              WebkitMask: 
-                "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-              WebkitMaskComposite: "xor",
-              maskComposite: "exclude"
-            }}
-            _hover={{
-              transform: "translateY(-2px)",
-              transition: "all 0.2s"
-            }}
-          >
-            <Heading size="md" color="cyan.400" mb={4}>{item.title}</Heading>
-            <VStack align="start" spacing={3}>
-              {Array.isArray(item.content) && item.content.map((text, i) => (
-                <Text key={i} color="gray.100">{text}</Text>
-              ))}
+        {/* 関連業種 */}
+        <Box
+          position="relative"
+          p={6}
+          rounded="lg"
+          bg="whiteAlpha.50"
+          borderWidth="1px"
+          borderColor="whiteAlpha.200"
+        >
+          <VStack align="start" spacing={6}>
+            <Heading 
+              size="md" 
+              color="cyan.400"
+              pb={2}
+              borderBottom="2px"
+              borderColor="cyan.400"
+              w="full"
+            >
+              関連業種
+            </Heading>
+            
+            <VStack align="stretch" spacing={3} w="full">
+              <RoleItem
+                role="マーケティング担当者"
+                description="製品訴求力の向上と作業時間の削減"
+              />
+              <RoleItem
+                role="製品マネージャー"
+                description="製品価値の明確な言語化と市場反応の改善"
+              />
+              <RoleItem
+                role="コピーライター"
+                description="アイデア出しと表現のバリエーション拡大"
+              />
+              <RoleItem
+                role="ECサイト運営者"
+                description="製品説明の質と量の両立による売上向上"
+              />
+              <RoleItem
+                role="ブランドマネージャー"
+                description="一貫したブランドボイスの維持と拡張"
+              />
             </VStack>
-          </Box>
-        ))}
+          </VStack>
+        </Box>
+
+        {/* 関連職種 */}
+        <Box
+          position="relative"
+          p={6}
+          rounded="lg"
+          bg="whiteAlpha.50"
+          borderWidth="1px"
+          borderColor="whiteAlpha.200"
+        >
+          <VStack align="start" spacing={6}>
+            <Heading 
+              size="md" 
+              color="cyan.400"
+              pb={2}
+              borderBottom="2px"
+              borderColor="cyan.400"
+              w="full"
+            >
+              関連職種
+            </Heading>
+            
+            <VStack align="stretch" spacing={3} w="full">
+              <RoleItem
+                role="EC・小売業"
+                description="製品説明ページのコンバージョン率向上に直結"
+              />
+              <RoleItem
+                role="メーカー"
+                description="技術的特性を顧客メリットに変換する際の壁を解消"
+              />
+              <RoleItem
+                role="SaaS企業"
+                description="複雑な機能を分かりやすく顧客価値として伝達"
+              />
+              <RoleItem
+                role="スタートアップ"
+                description="限られたリソースで効果的な製品訴求を実現"
+              />
+              <RoleItem
+                role="広告・マーケティング"
+                description="クライアント製品の価値を明確に表現"
+              />
+            </VStack>
+          </VStack>
+        </Box>
+
+        {/* 解決できる課題 */}
+        <Box
+          position="relative"
+          p={6}
+          rounded="lg"
+          bg="whiteAlpha.50"
+          borderWidth="1px"
+          borderColor="whiteAlpha.200"
+        >
+          <VStack align="start" spacing={6}>
+            <Heading 
+              size="md" 
+              color="cyan.400"
+              pb={2}
+              borderBottom="2px"
+              borderColor="cyan.400"
+              w="full"
+            >
+              解決できる課題
+            </Heading>
+            
+            <VStack align="stretch" spacing={4} w="full">
+              {/* 課題リスト */}
+              <VStack align="start" spacing={3}>
+                {[
+                  "製品の機能と顧客メリットを効果的に結びつけられない",
+                  "多数の製品説明を作成する時間と人的リソースが不足している",
+                  "表現のマンネリ化や業界用語の乱用で顧客に伝わらない"
+                ].map((issue, index) => (
+                  <HStack 
+                    key={index}
+                    p={3}
+                    bg="whiteAlpha.100"
+                    rounded="md"
+                    w="full"
+                  >
+                    <Text 
+                      color="cyan.300" 
+                      fontWeight="bold"
+                      minW="70px"
+                    >
+                      課題 {index + 1}
+                    </Text>
+                    <Text color="gray.300">
+                      {issue}
+                    </Text>
+                  </HStack>
+                ))}
+              </VStack>
+
+              {/* 規模感の目安 */}
+              <Box 
+                p={4} 
+                bg="whiteAlpha.100" 
+                rounded="md"
+                w="full"
+              >
+                <Text 
+                  color="cyan.300" 
+                  fontWeight="bold" 
+                  mb={3}
+                >
+                  規模感の目安
+                </Text>
+                <VStack align="start" spacing={2}>
+                  <Text color="gray.300" fontSize="sm">• 月間製品説明作成数：10件以上</Text>
+                  <Text color="gray.300" fontSize="sm">• 1件あたりの作成時間：30分以上</Text>
+                  <Text color="gray.300" fontSize="sm">• コンテンツ作成担当：1〜3名程度</Text>
+                </VStack>
+              </Box>
+            </VStack>
+          </VStack>
+        </Box>
       </SimpleGrid>
 
       {/* 課題の詳細解説（1カラム） */}
