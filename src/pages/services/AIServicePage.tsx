@@ -213,102 +213,331 @@ const AIServicePage: React.FC = () => {
             </Heading>
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
               <Box
-                bg="rgba(10, 10, 26, 0.9)"
-                p={10}
-                borderRadius="xl"
-                borderWidth="1px"
-                borderColor="neonBlue"
-                boxShadow="0 0 30px rgba(0, 184, 212, 0.3)"
+                position="relative"
+                overflow="hidden"
               >
-                <VStack align="center" spacing={4}>
-                  <Heading 
-                    size="md"
-                    textAlign="center"
+                <Box
+                  p={8}
+                  borderRadius="xl"
+                  bg="rgba(10, 10, 26, 0.8)"
+                  backdropFilter="blur(10px)"
+                  borderWidth="1px"
+                  borderColor="neonBlue"
+                  transition="all 0.3s"
+                  position="relative"
+                >
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    width="100%"
+                    height="100%"
+                    pointerEvents="none"
                     sx={{
-                      background: "linear-gradient(to right, #FFD700, #FF8C00, #FF4500)",
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      color: "transparent",
-                      WebkitTextStroke: '1px rgba(255, 200, 0, 0.3)',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: '-100%',
+                        width: '50%',
+                        height: '100%',
+                        background: 'linear-gradient(to right, transparent 0%, rgba(255, 215, 0, 0.1) 40%, rgba(255, 215, 0, 0.2) 50%, rgba(255, 215, 0, 0.1) 60%, transparent 100%)',
+                        animation: 'flashAnimation 4s infinite linear',
+                      },
+                      '@keyframes flashAnimation': {
+                        '0%': {
+                          transform: 'translateX(-100%)',
+                        },
+                        '100%': {
+                          transform: 'translateX(300%)',
+                        },
+                      },
                     }}
-                  >
-                    業務効率化
-                  </Heading>
-                  <Text color="whiteAlpha.800">
-                    ChatGPTによる定型業務の自動化や、画像認識による在庫管理など、
-                    人手不足を補い、コア業務に集中できる環境を実現します。
-                  </Text>
-                  <Text color="whiteAlpha.800" fontSize="sm">
-                    導入コスト：月額3万円〜
-                  </Text>
-                </VStack>
+                  />
+                  <VStack align="center" spacing={4}>
+                    <Heading 
+                      size="md"
+                      textAlign="center"
+                      sx={{
+                        background: "linear-gradient(to right, #FFD700, #FF8C00, #FF4500)",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        color: "transparent",
+                        WebkitTextStroke: '1px rgba(255, 200, 0, 0.3)',
+                      }}
+                    >
+                      業務効率化
+                    </Heading>
+                    <Text color="whiteAlpha.800">
+                      ChatGPTによる定型業務の自動化や、画像認識による在庫管理など、
+                      人手不足を補い、コア業務に集中できる環境を実現します。
+                    </Text>
+                    <Text color="whiteAlpha.800" fontSize="sm">
+                      導入コスト：月額3万円〜
+                    </Text>
+                  </VStack>
+                </Box>
               </Box>
 
               <Box
-                bg="rgba(10, 10, 26, 0.9)"
-                p={10}
-                borderRadius="xl"
-                borderWidth="1px"
-                borderColor="neonBlue"
-                boxShadow="0 0 30px rgba(0, 184, 212, 0.3)"
+                position="relative"
+                overflow="hidden"
               >
-                <VStack align="center" spacing={4}>
-                  <Heading 
-                    size="md"
-                    textAlign="center"
+                <Box
+                  p={8}
+                  borderRadius="xl"
+                  bg="rgba(10, 10, 26, 0.8)"
+                  backdropFilter="blur(10px)"
+                  borderWidth="1px"
+                  borderColor="neonBlue"
+                  transition="all 0.3s"
+                  position="relative"
+                >
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    width="100%"
+                    height="100%"
+                    pointerEvents="none"
                     sx={{
-                      background: "linear-gradient(to right, #FFD700, #FF8C00, #FF4500)",
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      color: "transparent",
-                      WebkitTextStroke: '1px rgba(255, 200, 0, 0.3)',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: '-100%',
+                        width: '50%',
+                        height: '100%',
+                        background: 'linear-gradient(to right, transparent 0%, rgba(255, 215, 0, 0.1) 40%, rgba(255, 215, 0, 0.2) 50%, rgba(255, 215, 0, 0.1) 60%, transparent 100%)',
+                        animation: 'flashAnimation 4s infinite linear',
+                      },
+                      '@keyframes flashAnimation': {
+                        '0%': {
+                          transform: 'translateX(-100%)',
+                        },
+                        '100%': {
+                          transform: 'translateX(300%)',
+                        },
+                      },
                     }}
-                  >
-                    マーケティング強化
-                  </Heading>
-                  <Text color="whiteAlpha.800">
-                    顧客データの分析やSNSマーケティングの最適化により、
-                    限られた予算で最大の効果を引き出します。
-                  </Text>
-                  <Text color="whiteAlpha.800" fontSize="sm">
-                    導入コスト：月額5万円〜
-                  </Text>
-                </VStack>
+                  />
+                  <VStack align="center" spacing={4}>
+                    <Heading 
+                      size="md"
+                      textAlign="center"
+                      sx={{
+                        background: "linear-gradient(to right, #FFD700, #FF8C00, #FF4500)",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        color: "transparent",
+                        WebkitTextStroke: '1px rgba(255, 200, 0, 0.3)',
+                      }}
+                    >
+                      マーケティング強化
+                    </Heading>
+                    <Text color="whiteAlpha.800">
+                      顧客データの分析やSNSマーケティングの最適化により、
+                      限られた予算で最大の効果を引き出します。
+                    </Text>
+                    <Text color="whiteAlpha.800" fontSize="sm">
+                      導入コスト：月額5万円〜
+                    </Text>
+                  </VStack>
+                </Box>
               </Box>
 
               <Box
-                bg="rgba(10, 10, 26, 0.9)"
-                p={10}
-                borderRadius="xl"
-                borderWidth="1px"
-                borderColor="neonBlue"
-                boxShadow="0 0 30px rgba(0, 184, 212, 0.3)"
+                position="relative"
+                overflow="hidden"
               >
-                <VStack align="center" spacing={4}>
-                  <Heading 
-                    size="md"
-                    textAlign="center"
+                <Box
+                  p={8}
+                  borderRadius="xl"
+                  bg="rgba(10, 10, 26, 0.8)"
+                  backdropFilter="blur(10px)"
+                  borderWidth="1px"
+                  borderColor="neonBlue"
+                  transition="all 0.3s"
+                  position="relative"
+                >
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    width="100%"
+                    height="100%"
+                    pointerEvents="none"
                     sx={{
-                      background: "linear-gradient(to right, #FFD700, #FF8C00, #FF4500)",
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      color: "transparent",
-                      WebkitTextStroke: '1px rgba(255, 200, 0, 0.3)',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: '-100%',
+                        width: '50%',
+                        height: '100%',
+                        background: 'linear-gradient(to right, transparent 0%, rgba(255, 215, 0, 0.1) 40%, rgba(255, 215, 0, 0.2) 50%, rgba(255, 215, 0, 0.1) 60%, transparent 100%)',
+                        animation: 'flashAnimation 4s infinite linear',
+                      },
+                      '@keyframes flashAnimation': {
+                        '0%': {
+                          transform: 'translateX(-100%)',
+                        },
+                        '100%': {
+                          transform: 'translateX(300%)',
+                        },
+                      },
                     }}
-                  >
-                    品質管理・予測
-                  </Heading>
-                  <Text color="whiteAlpha.800">
-                    AIによる品質チェックや需要予測により、
-                    ミスを減らし、効率的な在庫管理を実現します。
-                  </Text>
-                  <Text color="whiteAlpha.800" fontSize="sm">
-                    導入コスト：月額7万円〜
-                  </Text>
-                </VStack>
+                  />
+                  <VStack align="center" spacing={4}>
+                    <Heading 
+                      size="md"
+                      textAlign="center"
+                      sx={{
+                        background: "linear-gradient(to right, #FFD700, #FF8C00, #FF4500)",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        color: "transparent",
+                        WebkitTextStroke: '1px rgba(255, 200, 0, 0.3)',
+                      }}
+                    >
+                      品質管理・予測
+                    </Heading>
+                    <Text color="whiteAlpha.800">
+                      AIによる品質チェックや需要予測により、
+                      ミスを減らし、効率的な在庫管理を実現します。
+                    </Text>
+                    <Text color="whiteAlpha.800" fontSize="sm">
+                      導入コスト：月額7万円〜
+                    </Text>
+                  </VStack>
+                </Box>
               </Box>
             </SimpleGrid>
           </Box>
+
+          {/* 特設ページへの導線セクション - 2カラム */}
+          <SimpleGrid 
+            columns={{ base: 1, md: 2 }} 
+            spacing={8} 
+            mb={16}
+            w="100%"
+          >
+            {/* AI活用カテゴリへのカード */}
+            <Link
+              as={RouterLink}
+              to="/ai-category"
+              _hover={{ textDecoration: 'none' }}
+            >
+              <Box
+                position="relative"
+                overflow="hidden"
+                borderRadius="xl"
+              >
+                <Box
+                  p={8}
+                  bg="rgba(10, 10, 26, 0.8)"
+                  backdropFilter="blur(10px)"
+                  borderWidth="1px"
+                  borderColor="neonBlue"
+                  boxShadow="0 0 30px rgba(0, 184, 212, 0.3)"
+                  transition="all 0.3s"
+                  _hover={{
+                    transform: "translateY(-5px)",
+                    boxShadow: "0 0 40px rgba(0, 184, 212, 0.5)"
+                  }}
+                >
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    right={0}
+                    bottom={0}
+                    pointerEvents="none"
+                    sx={{
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: '-100%',
+                        width: '50%',
+                        height: '100%',
+                        background: 'linear-gradient(to right, transparent 0%, rgba(255, 215, 0, 0.1) 40%, rgba(255, 215, 0, 0.2) 50%, rgba(255, 215, 0, 0.1) 60%, transparent 100%)',
+                        animation: 'flashAnimation 4s infinite linear',
+                      },
+                    }}
+                  />
+                  <VStack spacing={4} align="center" position="relative" zIndex={1}>
+                    <Icon as={FaRobot} w={12} h={12} color="neonBlue" />
+                    <Heading as="h3" size="lg" color="white" textAlign="center">
+                      AI活用カテゴリへ
+                    </Heading>
+                    <Text color="whiteAlpha.900" textAlign="center">
+                      業界・用途別のAI活用事例と導入のポイントをご紹介
+                    </Text>
+                    <Icon as={FaArrowRight} w={6} h={6} color="neonBlue" />
+                  </VStack>
+                </Box>
+              </Box>
+            </Link>
+
+            {/* AIでできることリストへのカード */}
+            <Link
+              as={RouterLink}
+              to="/ai-possibilities"
+              _hover={{ textDecoration: 'none' }}
+            >
+              <Box
+                position="relative"
+                overflow="hidden"
+                borderRadius="xl"
+              >
+                <Box
+                  p={8}
+                  bg="rgba(10, 10, 26, 0.8)"
+                  backdropFilter="blur(10px)"
+                  borderWidth="1px"
+                  borderColor="neonBlue"
+                  boxShadow="0 0 30px rgba(0, 184, 212, 0.3)"
+                  transition="all 0.3s"
+                  _hover={{
+                    transform: "translateY(-5px)",
+                    boxShadow: "0 0 40px rgba(0, 184, 212, 0.5)"
+                  }}
+                >
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    right={0}
+                    bottom={0}
+                    pointerEvents="none"
+                    sx={{
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: '-100%',
+                        width: '50%',
+                        height: '100%',
+                        background: 'linear-gradient(to right, transparent 0%, rgba(255, 215, 0, 0.1) 40%, rgba(255, 215, 0, 0.2) 50%, rgba(255, 215, 0, 0.1) 60%, transparent 100%)',
+                        animation: 'flashAnimation 4s infinite linear',
+                      },
+                    }}
+                  />
+                  <VStack spacing={4} align="center" position="relative" zIndex={1}>
+                    <Icon as={FaLightbulb} w={12} h={12} color="neonBlue" />
+                    <Heading as="h3" size="lg" color="white" textAlign="center">
+                      AIでできることリストへ
+                    </Heading>
+                    <Text color="whiteAlpha.900" textAlign="center">
+                      最新のAI技術で実現可能なソリューション一覧
+                    </Text>
+                    <Icon as={FaArrowRight} w={6} h={6} color="neonBlue" />
+                  </VStack>
+                </Box>
+              </Box>
+            </Link>
+          </SimpleGrid>
 
           {/* ワークライフバランスメッセージ */}
           <Box 

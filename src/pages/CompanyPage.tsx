@@ -32,10 +32,10 @@ const CompanyPage: React.FC = () => {
 
   // 会社情報データ
   const companyData = {
-    name: 'IDEAL株式会社',
-    description: '私たちは次世代技術を活用し、クライアントのビジネス課題を解決する革新的なソリューションを提供しています。AIブロックチェーン、メタバース、ウェブ開発からコンサルティングまで、幅広い専門知識で未来を創造します。',
-    vision: '技術の力で人々の可能性を広げ、より良い未来を創造する',
-    mission: 'クライアントの成功を最優先に、革新的で持続可能なソリューションを提供し続ける',
+    name: 'IDEAL合同会社',
+    description: '様々な分野のスペシャリストが集まり、必要としている企業と必要とされている人材がダイレクトにマッチングする場所を提供する',
+    vision: '正直さと誠実さが最大の価値となる場所を提供し、公平性と平等性の新たな基準を作る',
+    mission: '価値を生み出す人と、価値を必要とする人が出会う場所。本当のダイレクトマッチングを実現する',
     values: [
       {
         title: '革新',
@@ -54,9 +54,9 @@ const CompanyPage: React.FC = () => {
         description: 'チームワークとパートナーシップを通じて、共に成長します。'
       }
     ],
-    founded: '2018年',
-    employees: '50名',
-    clients: '200社以上',
+    founded: '2024年',
+    employees: '13人',
+    clients: '37社',
     address: '東京都渋谷区神宮前X-X-X',
     phone: '03-XXXX-XXXX',
     email: 'info@ideal-company.com',
@@ -66,8 +66,8 @@ const CompanyPage: React.FC = () => {
   // 統計データ
   const stats = [
     { label: '設立', value: companyData.founded, icon: FaCalendarAlt },
-    { label: '従業員数', value: companyData.employees, icon: FaUsers },
-    { label: '取引実績', value: companyData.clients, icon: FaGlobe }
+    { label: 'チームメンバー', value: companyData.employees, icon: FaUsers },
+    { label: '協力企業', value: companyData.clients, icon: FaGlobe }
   ]
 
   return (
@@ -177,47 +177,7 @@ const CompanyPage: React.FC = () => {
                 ))}
               </SimpleGrid>
             </Box>
-
-            {/* 会社情報セクション */}
-            <Box width="100%" as={motion.div} variants={itemVariants}>
-              <Heading as="h2" size="xl" mb={10} textAlign="center" color="white">
-                会社情報
-              </Heading>
-              <Box 
-                p={8} 
-                borderRadius="lg" 
-                bg="rgba(10, 10, 26, 0.6)" 
-                backdropFilter="blur(10px)"
-                borderWidth="1px"
-                borderColor="neonBlue"
-                boxShadow="0 0 20px rgba(0, 184, 212, 0.2)"
-              >
-                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-                  <HStack spacing={4}>
-                    <Icon as={FaMapMarkerAlt} w={6} h={6} color="neonBlue" />
-                    <VStack align="start" spacing={0}>
-                      <Text fontWeight="bold" color="white">所在地</Text>
-                      <Text color="whiteAlpha.900">{companyData.address}</Text>
-                    </VStack>
-                  </HStack>
-                  <HStack spacing={4}>
-                    <Icon as={FaPhone} w={6} h={6} color="neonBlue" />
-                    <VStack align="start" spacing={0}>
-                      <Text fontWeight="bold" color="white">電話番号</Text>
-                      <Text color="whiteAlpha.900">{companyData.phone}</Text>
-                    </VStack>
-                  </HStack>
-                  <HStack spacing={4}>
-                    <Icon as={FaEnvelope} w={6} h={6} color="neonBlue" />
-                    <VStack align="start" spacing={0}>
-                      <Text fontWeight="bold" color="white">メールアドレス</Text>
-                      <Text color="whiteAlpha.900">{companyData.email}</Text>
-                    </VStack>
-                  </HStack>
-                </SimpleGrid>
-              </Box>
-            </Box>
-
+            
             {/* CTAセクション */}
             <Box width="100%" as={motion.div} variants={itemVariants} textAlign="center">
               <Heading as="h2" size="xl" mb={6} color="white">
