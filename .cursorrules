@@ -1,0 +1,74 @@
+# IDEAL OFFICIAL Project Rules
+
+## 技術スタック
+framework: react@18.2.0
+typescript: 5.2.0
+ui_framework: chakra-ui@2.8.0
+styling: tailwindcss@3.4.0
+state_management: 
+  - redux-toolkit@2.0.1
+  - react-query@4.36.1
+routing: react-router-dom@6.30.0
+cms: microcms-js-sdk@3.2.0
+i18n: i18next@23.7.6
+
+## アニメーション・UI
+animation:
+  - framer-motion@12.5.0
+  - gsap@3.12.3
+  - lottie-react@2.4.0
+3d: three@0.159.0
+
+## フォーム
+form_management: react-hook-form@7.48.2
+validation: yup@1.3.2
+
+## ディレクトリ構造
+directories:
+  - src/pages: ページコンポーネント
+  - src/components: 共通コンポーネント
+  - src/components/layout: レイアウトコンポーネント
+  - src/lib: ユーティリティ・設定
+  - src/hooks: カスタムフック
+  - src/store: Redux store
+  - src/api: API関連
+
+## コーディングルール
+typescript:
+  strict: true
+  noUnusedLocals: true
+  noUnusedParameters: true
+  paths:
+    "@/*": ["src/*"]
+
+styling:
+  - Chakra UIコンポーネントを優先
+  - カスタムスタイルはTailwind CSS
+  - テーマ設定は src/lib/theme.ts で管理
+
+state_management:
+  global: Redux Toolkit
+  server: React Query
+  local: React Hooks
+
+## 変更禁止事項
+- フレームワークのメジャーバージョンアップ
+- アーキテクチャの大幅な変更
+- 既存の状態管理パターンの変更
+- テーマ設定の構造変更
+
+## セキュリティ
+env_variables:
+  prefix: VITE_
+  location: .env
+
+api_security:
+  - APIキーは環境変数で管理
+  - CORS設定の変更は要承認
+
+## パフォーマンス
+optimization:
+  - 画像の最適化必須
+  - 遅延読み込みの使用
+  - 不要なインポートの削除
+  - コード分割の適切な使用 
