@@ -1,25 +1,27 @@
 import React, { useState } from 'react'
-import { Box, Container, Heading, Text, SimpleGrid, VStack, FormControl, FormLabel, Input, Textarea, Button, Select, useToast, FormErrorMessage, Flex, Icon } from '@chakra-ui/react'
+import { Box, Container, Heading, Text, SimpleGrid, VStack, FormControl, FormLabel, Input, Textarea, Button, Select, useToast, FormErrorMessage, Flex, Icon, Image, Badge, HStack, Link, ButtonGroup } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import { FaEnvelope, FaClock, FaGlobe } from 'react-icons/fa'
+import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaBuilding, FaStar } from 'react-icons/fa'
 import PageHeader from '../components/common/PageHeader'
 
+// 
 const ContactPage: React.FC = () => {
   const toast = useToast()
 
+  // 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    category: '',
-    type: '',
-    occupation: '',
-    industry: '',
+    company: '',
+    phone: '',
+    service: '',
     message: ''
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -42,48 +44,45 @@ const ContactPage: React.FC = () => {
     }
   }
 
-  const categoryOptions = [
-    { value: '', label: 'カテゴリを選択' },
-    { value: 'ai', label: 'AI・機械学習' },
-    { value: 'blockchain', label: 'ブロックチェーン' },
-    { value: 'web', label: 'Web開発' },
-    { value: 'app', label: 'アプリ開発' },
-    { value: 'game', label: 'ゲーム開発' },
-    { value: 'metaverse', label: 'メタバース' },
-    { value: 'nft', label: 'NFT' },
-    { value: 'consulting', label: 'コンサルティング' },
-    { value: 'other', label: 'その他' }
+  // 
+  const serviceOptions = [
+    { value: '', label: '' },
+    { value: 'ai-blockchain', label: 'AI' },
+    { value: 'metaverse', label: '' },
+    { value: 'web-development', label: '' },
+    { value: 'app-development', label: '' },
+    { value: 'game-development', label: '' },
+    { value: 'english-consulting', label: '' },
+    { value: 'study-abroad', label: '' },
+    { value: 'career-consulting', label: '' },
+    { value: 'other', label: '' }
   ]
 
-  const typeOptions = [
-    { value: '', label: '内容を選択' },
-    { value: 'development', label: '開発' },
-    { value: 'consulting', label: 'コンサルティング' },
-    { value: 'operation', label: '運用・保守' },
-    { value: 'training', label: 'トレーニング' },
-    { value: 'recruitment', label: '人材募集' },
-    { value: 'partnership', label: 'パートナーシップ' },
-    { value: 'other', label: 'その他' }
-  ]
-
+  // 
   const contactInfo = [
     {
+      icon: FaMapMarkerAlt,
+      title: '',
+      content: ''
+    },
+    {
+      icon: FaPhone,
+      title: '',
+      content: '03-XXXX-XXXX'
+    },
+    {
       icon: FaEnvelope,
-      title: 'メールアドレス',
-      content: 'contact@ideal-official.com'
+      title: '',
+      content: 'info@ideal-company.com'
     },
     {
-      icon: FaClock,
-      title: '対応時間',
-      content: '平日 9:00 - 18:00'
-    },
-    {
-      icon: FaGlobe,
-      title: 'ウェブサイト',
-      content: 'https://ideal-official.com'
+      icon: FaBuilding,
+      title: '',
+      content: ' 9:00 - 18:00'
     }
   ]
 
+  // 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -91,6 +90,7 @@ const ContactPage: React.FC = () => {
       [name]: value
     }))
 
+    // 
     if (errors[name]) {
       setErrors(prev => {
         const newErrors = { ...prev }
@@ -100,15 +100,15 @@ const ContactPage: React.FC = () => {
     }
   }
 
+  // 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
+    // 
     const newErrors: Record<string, string> = {}
     if (!formData.name) newErrors.name = 'お名前を入力してください'
     if (!formData.email) newErrors.email = 'メールアドレスを入力してください'
-    if (!formData.category) newErrors.category = 'カテゴリを選択してください'
-    if (!formData.type) newErrors.type = '内容を選択してください'
     if (!formData.message) newErrors.message = 'メッセージを入力してください'
 
     if (Object.keys(newErrors).length > 0) {
@@ -117,6 +117,7 @@ const ContactPage: React.FC = () => {
       return
     }
 
+    // 
     setTimeout(() => {
       setIsSubmitting(false)
       toast({
@@ -129,10 +130,9 @@ const ContactPage: React.FC = () => {
       setFormData({
         name: '',
         email: '',
-        category: '',
-        type: '',
-        occupation: '',
-        industry: '',
+        company: '',
+        phone: '',
+        service: '',
         message: ''
       })
     }, 1500)
@@ -159,7 +159,6 @@ const ContactPage: React.FC = () => {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="例：山田 太郎"
-                      variant="filled"
                     />
                     <FormErrorMessage>{errors.name}</FormErrorMessage>
                   </FormControl>
@@ -172,65 +171,44 @@ const ContactPage: React.FC = () => {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="例：example@email.com"
-                      variant="filled"
                     />
                     <FormErrorMessage>{errors.email}</FormErrorMessage>
                   </FormControl>
 
-                  <FormControl isInvalid={!!errors.category}>
-                    <FormLabel>カテゴリ <Text as="span" color="red.500">*</Text></FormLabel>
-                    <Select
-                      name="category"
-                      value={formData.category}
+                  <FormControl>
+                    <FormLabel>会社名</FormLabel>
+                    <Input
+                      name="company"
+                      value={formData.company}
                       onChange={handleChange}
-                      variant="filled"
+                      placeholder="例：株式会社〇〇"
+                    />
+                  </FormControl>
+
+                  <FormControl>
+                    <FormLabel>電話番号</FormLabel>
+                    <Input
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="例：03-XXXX-XXXX"
+                    />
+                  </FormControl>
+
+                  <FormControl>
+                    <FormLabel>サービス</FormLabel>
+                    <Select
+                      name="service"
+                      value={formData.service}
+                      onChange={handleChange}
+                      placeholder="サービスを選択"
                     >
-                      {categoryOptions.map((option) => (
+                      {serviceOptions.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
                       ))}
                     </Select>
-                    <FormErrorMessage>{errors.category}</FormErrorMessage>
-                  </FormControl>
-
-                  <FormControl isInvalid={!!errors.type}>
-                    <FormLabel>内容 <Text as="span" color="red.500">*</Text></FormLabel>
-                    <Select
-                      name="type"
-                      value={formData.type}
-                      onChange={handleChange}
-                      variant="filled"
-                    >
-                      {typeOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </Select>
-                    <FormErrorMessage>{errors.type}</FormErrorMessage>
-                  </FormControl>
-
-                  <FormControl>
-                    <FormLabel>職種</FormLabel>
-                    <Input
-                      name="occupation"
-                      value={formData.occupation}
-                      onChange={handleChange}
-                      placeholder="例：エンジニア、プロジェクトマネージャー"
-                      variant="filled"
-                    />
-                  </FormControl>
-
-                  <FormControl>
-                    <FormLabel>業種</FormLabel>
-                    <Input
-                      name="industry"
-                      value={formData.industry}
-                      onChange={handleChange}
-                      placeholder="例：IT、製造業、金融"
-                      variant="filled"
-                    />
                   </FormControl>
 
                   <FormControl isInvalid={!!errors.message}>
@@ -241,7 +219,6 @@ const ContactPage: React.FC = () => {
                       onChange={handleChange}
                       placeholder="ご質問・ご相談内容を入力してください"
                       rows={6}
-                      variant="filled"
                     />
                     <FormErrorMessage>{errors.message}</FormErrorMessage>
                   </FormControl>
@@ -275,16 +252,19 @@ const ContactPage: React.FC = () => {
                 ))}
               </SimpleGrid>
 
-              {/* 注意事項 */}
-              <Box p={4} borderWidth="1px" borderRadius="lg" bg="whiteAlpha.50">
-                <VStack align="start" spacing={2}>
-                  <Text fontWeight="bold">ご注意事項</Text>
-                  <Text fontSize="sm">
-                    • お問い合わせの内容によっては、回答にお時間をいただく場合がございます。<br />
-                    • 営業目的のお問い合わせはお断りさせていただきます。<br />
-                    • 個人情報は適切に管理し、第三者への提供は行いません。
-                  </Text>
-                </VStack>
+              {/* アクセス情報 */}
+              <Box>
+                <Heading size="md" mb={4}>アクセス</Heading>
+                <Box
+                  as="iframe"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.8280305550287!2d139.7645463152582!3d35.681235979999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188bfbd89f700b%3A0x277c49ba34ed38!2z5p2x5Lqs6aeF!5e0!3m2!1sja!2sjp!4v1645431234567!5m2!1sja!2sjp"
+                  width="100%"
+                  height="300"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </Box>
             </VStack>
           </Box>
@@ -294,4 +274,4 @@ const ContactPage: React.FC = () => {
   )
 }
 
-export default ContactPage
+export default ContactPage 

@@ -167,7 +167,7 @@ const ServicesPage: React.FC = () => {
               </Text>
               <Button
                 as={Link}
-                to="/company/contact"
+                to="/contact"
                 variant="accent"
                 size="lg"
                 px={8}

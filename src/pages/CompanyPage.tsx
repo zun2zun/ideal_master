@@ -189,7 +189,7 @@ const CompanyPage: React.FC = () => {
               </Text>
               <Button 
                 as={Link} 
-                to="/company/contact" 
+                to="/contact" 
                 variant="primary" 
                 size="lg" 
                 px={10} 

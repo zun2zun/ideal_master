@@ -4,6 +4,10 @@ const colors = {
   neonBlue: "rgba(0, 184, 212, 1)",
   neonPurple: '#7B1FA2',
   deepBlue: '#0A0A1A',
+  navy: {
+    900: '#050614',
+    800: '#0A0A1A',
+  },
   gradients: {
     blue: {
       start: "#4299E1",  // blue.400
@@ -17,6 +21,14 @@ const styles = {
     body: {
       bg: '#050614',
       color: 'white',
+    },
+    'select option': {
+      bg: '#0A0A1A !important',
+      color: 'white !important',
+    },
+    'select:focus option:checked': {
+      bg: '#1A1A2A !important',
+      color: 'white !important',
     },
     '.gradient-text': {
       bgGradient: 'linear(to-r, blue.400, cyan.400)',
@@ -128,6 +140,90 @@ const components = {
         bg: 'rgba(66, 153, 225, 0.3)',
         color: 'white',
       },
+    },
+  },
+  Select: {
+    baseStyle: {
+      field: {
+        bg: 'navy.900',
+        color: 'white',
+        borderColor: 'whiteAlpha.300',
+        _hover: {
+          borderColor: 'whiteAlpha.400',
+        },
+        _focus: {
+          borderColor: 'blue.400',
+          boxShadow: '0 0 0 1px var(--chakra-colors-blue-400)',
+        },
+      },
+      icon: {
+        color: 'white',
+      },
+    },
+    variants: {
+      filled: {
+        field: {
+          bg: 'navy.900',
+          color: 'white',
+          borderColor: 'whiteAlpha.300',
+          _hover: {
+            bg: 'navy.800',
+            borderColor: 'whiteAlpha.400',
+          },
+          _focus: {
+            bg: 'navy.800',
+            borderColor: 'blue.400',
+          },
+          _invalid: {
+            borderColor: 'red.500',
+          },
+        },
+      },
+    },
+    defaultProps: {
+      variant: 'filled',
+    },
+  },
+  Input: {
+    variants: {
+      filled: {
+        field: {
+          bg: 'navy.900',
+          color: 'white',
+          borderColor: 'whiteAlpha.300',
+          _hover: {
+            bg: 'navy.900',
+            borderColor: 'whiteAlpha.400',
+          },
+          _focus: {
+            bg: 'navy.900',
+            borderColor: 'blue.400',
+          },
+        },
+      },
+    },
+    defaultProps: {
+      variant: 'filled',
+    },
+  },
+  Textarea: {
+    variants: {
+      filled: {
+        bg: 'navy.900',
+        color: 'white',
+        borderColor: 'whiteAlpha.300',
+        _hover: {
+          bg: 'navy.900',
+          borderColor: 'whiteAlpha.400',
+        },
+        _focus: {
+          bg: 'navy.900',
+          borderColor: 'blue.400',
+        },
+      },
+    },
+    defaultProps: {
+      variant: 'filled',
     },
   },
 }

@@ -24,6 +24,8 @@ import AICapabilitiesPage from './pages/AICapabilitiesPage'
 import ToolDetail from './pages/tools/ToolDetail'
 import AICapabilityListPage from './pages/AICapabilityListPage'
 import NotFoundPage from './pages/NotFoundPage'
+import { ProvidersPage } from './pages/ProvidersPage'
+import { ProviderDetailPage } from './pages/ProviderDetailPage'
 
 const App: React.FC = () => {
   return (
@@ -51,6 +53,8 @@ const App: React.FC = () => {
           <Route path="/capabilities" element={<AICapabilitiesPage />} />
           <Route path="/tools/:id" element={<ToolDetail />} />
           <Route path="/ai-list" element={<AICapabilityListPage />} />
+          <Route path="/providers" element={<ProvidersPage />} />
+          <Route path="/providers/:id" element={<ProviderDetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>

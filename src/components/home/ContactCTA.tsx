@@ -117,7 +117,7 @@ const ContactCTA: React.FC = () => {
               <motion.div variants={itemVariants}>
                 <Button
                   as={RouterLink}
-                  to="/company/contact"
+                  to="/contact"
                   variant="primary"
                   size={buttonSize}
                   rightIcon={<FaArrowRight />}

@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
       links: [
         { label: '会社概要', path: '/company/about' },
         { label: 'チーム紹介', path: '/company/team' },
-        { label: 'お問い合わせ', path: '/company/contact' },
+        { label: 'お問い合わせ', path: '/contact' },
       ],
     },
     {

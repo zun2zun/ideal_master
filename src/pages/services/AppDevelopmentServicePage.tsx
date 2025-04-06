@@ -674,7 +674,7 @@ const AppDevelopmentServicePage: React.FC = () => {
                   <Center mt={8}>
                     <Button 
                       as={RouterLink} 
-                      to="/company/contact"
+                      to="/contact"
                       size="lg"
                       colorScheme="cyan"
                       rightIcon={<Icon as={FaArrowRight} />}
@@ -863,7 +863,7 @@ const AppDevelopmentServicePage: React.FC = () => {
               <HStack spacing={4} justify="center">
                 <Button
                   as={RouterLink}
-                  to="/company/contact"
+                  to="/contact"
                   variant="accent"
                   size="lg"
                   px={8}

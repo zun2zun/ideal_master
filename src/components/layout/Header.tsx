@@ -213,7 +213,7 @@ export const Header = () => {
           >
             <Button
               as={RouterLink}
-              to="/company/contact"
+              to="/contact"
               variant="primary"
               size="md"
               className="gradient-border"
@@ -301,7 +301,7 @@ export const Header = () => {
                 ))}
                 <Button
                   as={RouterLink}
-                  to="/company/contact"
+                  to="/contact"
                   variant="primary"
                   size="md"
                   mt={4}
