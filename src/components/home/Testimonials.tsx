@@ -8,39 +8,30 @@ import { FaQuoteLeft, FaChevronLeft, FaChevronRight, FaStar } from 'react-icons/
 const testimonials = [
   {
     id: 1,
-    name: '田中 健太',
-    position: 'テクノロジー企業 CTO',
-    company: 'Tech Innovations株式会社',
-    quote: 'IDEALのAIとブロックチェーンソリューションは、我々のビジネスに革命をもたらしました。データセキュリティと処理効率が大幅に向上し、運用コストを30%削減することができました。',
+    name: 'O,S',
+    position: '某チェーン飲食店グループ代表',
+    company: '某チェーン飲食店グループ',
+    quote: '一見無関係AI技術を飲食店経営に導入することで、業務効率化と従業員の労働環境改善に大きな効果を与えられました。',
     avatar: '/src/assets/images/avatar-placeholder-1.jpg',
     rating: 5,
   },
   {
     id: 2,
-    name: '鈴木 美咲',
-    position: 'マーケティングディレクター',
-    company: 'Global Connect株式会社',
-    quote: 'メタバースを活用したバーチャルショールームの構築により、海外顧客とのエンゲージメントが劇的に向上しました。IDEALのクリエイティブなアプローチと技術力には大変満足しています。',
+    name: 'M,O',
+    position: '経営者',
+    company: '某医療関係施設',
+    quote: '純粋な患者様の声を受け取ることが難しい医療分野においてAIとブロックチェーンを活用した情報収集と管理の仕組みに、新しい医療施設運営の可能性を感じています。',
     avatar: '/src/assets/images/avatar-placeholder-2.jpg',
     rating: 5,
   },
   {
     id: 3,
-    name: '佐藤 隆',
-    position: 'CEO',
-    company: 'NextGen Education',
-    quote: 'オンライン英会話プラットフォームの開発からマーケティングまで、一貫したサポートを提供していただきました。特に、AIを活用した学習分析システムは、生徒の満足度向上に大きく貢献しています。',
+    name: 'E,N',
+    position: 'コンサルタントCEO',
+    company: '',
+    quote: 'コンサルタントとしての役割がAIによって大きく変化していく事を、AIとブロックチェーンを活用した社会システム構築に参加することで大いに学び、自社に役立てることができています。',
     avatar: '/src/assets/images/avatar-placeholder-3.jpg',
     rating: 5,
-  },
-  {
-    id: 4,
-    name: '山田 優子',
-    position: 'HR部長',
-    company: 'グローバルタレント株式会社',
-    quote: 'キャリアコンサルティングサービスを導入して以来、社員のスキルアップと定着率が向上しました。IDEALのコンサルタントは、個々の状況に合わせた的確なアドバイスを提供してくれます。',
-    avatar: '/src/assets/images/avatar-placeholder-4.jpg',
-    rating: 4,
   },
 ]
 
@@ -114,18 +105,6 @@ const Testimonials: React.FC = () => {
         >
           {/* セクションヘッダー */}
           <Flex direction="column" align="center" textAlign="center" mb={16}>
-            <motion.div variants={itemVariants}>
-              <Text
-                color="neonBlue"
-                fontWeight="bold"
-                letterSpacing="wider"
-                textTransform="uppercase"
-                fontSize="sm"
-                mb={2}
-              >
-                お客様の声
-              </Text>
-            </motion.div>
             <motion.div variants={itemVariants}>
               <Heading
                 as="h2"

@@ -131,29 +131,6 @@ const FeaturedCases: React.FC = ({ isHomePage = false }) => {
           <Flex direction="column" align="center" textAlign="center" mb={16}>
             <motion.div variants={itemVariants}>
               <Text
-                color="neonBlue"
-                fontWeight="bold"
-                letterSpacing="wider"
-                textTransform="uppercase"
-                fontSize="sm"
-                mb={2}
-              >
-                実績紹介
-              </Text>
-            </motion.div>
-            <motion.div variants={itemVariants}>
-              <Heading
-                as="h2"
-                fontSize={{ base: '3xl', md: '4xl' }}
-                fontWeight="bold"
-                mb={4}
-              >
-                <Text as="span" color="neonBlue">革新的なソリューション</Text>
-                で成功を実現
-              </Heading>
-            </motion.div>
-            <motion.div variants={itemVariants}>
-              <Text
                 color="gray.300"
                 fontSize="lg"
                 maxW="2xl"

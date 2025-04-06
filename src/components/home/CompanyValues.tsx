@@ -130,18 +130,6 @@ const CompanyValues: React.FC = () => {
           {/* セクションヘッダー */}
           <Flex direction="column" align="center" textAlign="center" mb={16}>
             <motion.div variants={itemVariants}>
-              <Text
-                color="neonBlue"
-                fontWeight="bold"
-                letterSpacing="wider"
-                textTransform="uppercase"
-                fontSize="sm"
-                mb={2}
-              >
-                企業価値
-              </Text>
-            </motion.div>
-            <motion.div variants={itemVariants}>
               <Heading
                 as="h2"
                 fontSize={{ base: '3xl', md: '4xl' }}

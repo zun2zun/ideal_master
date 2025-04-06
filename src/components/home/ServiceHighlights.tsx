@@ -119,17 +119,6 @@ const ServiceHighlights: React.FC = () => {
           {/* セクションヘッダー */}
           <VStack spacing={4} mb={16} textAlign="center">
             <motion.div variants={itemVariants}>
-              <Text
-                color="neonBlue"
-                fontWeight="bold"
-                letterSpacing="wider"
-                textTransform="uppercase"
-                fontSize="sm"
-              >
-                サービス
-              </Text>
-            </motion.div>
-            <motion.div variants={itemVariants}>
               <Heading
                 as="h2"
                 fontSize={{ base: '3xl', md: '4xl' }}

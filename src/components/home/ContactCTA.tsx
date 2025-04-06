@@ -112,18 +112,6 @@ const ContactCTA: React.FC = () => {
                   </Text>
                 </motion.div>
                 
-                <motion.div variants={itemVariants}>
-                  <Text
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    fontWeight="bold"
-                    color="white"
-                  >
-                    03-XXXX-XXXX
-                  </Text>
-                  <Text fontSize="sm" color="gray.400" mt={1}>
-                    平日 9:00-18:00
-                  </Text>
-                </motion.div>
               </Box>
               
               <motion.div variants={itemVariants}>
