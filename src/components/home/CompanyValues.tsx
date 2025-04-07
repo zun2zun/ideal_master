@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react'
-import { Box, Container, Heading, Text, SimpleGrid, Flex, Stat, StatLabel, StatNumber, StatHelpText, useDisclosure } from '@chakra-ui/react'
+import { Box, Container, Heading, Text, SimpleGrid, Flex, Stat, StatLabel, StatNumber, StatHelpText } from '@chakra-ui/react'
 import { motion, useAnimation } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { CompanyValue } from '@/types'
 
 // GSAPプラグインの登録
 if (typeof window !== 'undefined') {
@@ -11,7 +12,7 @@ if (typeof window !== 'undefined') {
 }
 
 // 会社の価値提案データ
-const companyValues = [
+const companyValues: CompanyValue[] = [
   {
     id: 'expertise',
     title: '専門性',
@@ -157,7 +158,7 @@ const CompanyValues: React.FC = () => {
           
           {/* 価値提案カード */}
           <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10} mb={20}>
-            {companyValues.map((value, index) => (
+            {companyValues.map((value) => (
               <motion.div key={value.id} variants={itemVariants}>
                 <Box
                   p={8}
@@ -235,11 +236,10 @@ const CompanyValues: React.FC = () => {
             />
             
             <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={8} position="relative" zIndex="1">
-              {stats.map((stat, index) => (
+              {stats.map((stat) => (
                 <motion.div
-                  key={index}
+                  key={stat.label}
                   variants={itemVariants}
-                  custom={index}
                 >
                   <Stat textAlign="center">
                     <StatLabel fontSize="md" color="gray.300" mb={2}>

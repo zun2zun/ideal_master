@@ -1,87 +1,18 @@
 import React from 'react';
-import { Box, Heading, Text, HStack, VStack, Icon, Image, Tag, useBreakpointValue, WrapItem } from '@chakra-ui/react';
-import { FaArrowRight, FaChevronRight } from 'react-icons/fa';
+import { Box, Heading, Text, VStack, Image, useBreakpointValue } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
-interface AICapabilityContent {
-  id: string;
-  title: string;
-  description: string;
-  category: string[];
-  technologies: string[];
-  thumbnail: {
-    url: string;
-  };
-}
+import { AICapability } from '@/types';
 
 interface AICapabilitySectionProps {
   title: string;
   challenge: string;
-  contents: AICapabilityContent[];
+  contents: AICapability[];
 }
 
-// カテゴリの内部値と表示名のマッピングを更新
-const categoryMapping = {
-  'text_creation': '文章作成',
-  'image_generation': '画像生成',
-  'video_creation': '動画作成',
-  'shift_management': 'シフト管理',
-  'document_creation': '文書作成・管理',
-  'meeting_support': '会議・ミーティング支援',
-  'customer_support': 'カスタマーサポート',
-  'data_analysis': 'データ分析・レポート',
-  'translation': '翻訳・多言語対応',
-  'design_support': 'デザイン支援',
-  'marketing_analysis': 'マーケティング分析',
-  // ... 他のカテゴリも同様に追加
-};
-
-// カテゴリの文字列から内部値を取得する関数を追加
-const getInternalCategory = (category: string) => {
-  // "category_name（表示名）" の形式から category_name を取得
-  return category.split('（')[0].trim();
-};
-
-// filterByCategory関数を修正
-const filterByCategory = (capabilities: AICapabilityContent[], categoryKey: string) => {
-  console.log('Filtering for category:', categoryKey);
-  console.log('Available capabilities:', capabilities);
-  
-  return capabilities.filter(cap => {
-    if (!cap.category || !Array.isArray(cap.category)) {
-      console.log('Invalid category format for:', cap);
-      return false;
-    }
-    
-    // カテゴリの内部値を取得して比較
-    const matches = cap.category.some(cat => {
-      const internalCat = getInternalCategory(cat);
-      console.log('Comparing:', internalCat, 'with', categoryKey);
-      return internalCat === categoryKey;
-    });
-    
-    console.log('Matches for', cap.title, ':', matches);
-    return matches;
-  });
-};
-
-// カテゴリの表示名マッピング
-const categoryDisplayNames: { [key: string]: string } = {
-  'text_creation': '文章作成',
-  'image_generation': '画像生成',
-  'video_creation': '動画作成',
-  'shift_management': 'シフト管理'
-};
-
-// カテゴリ名を変換する関数
-const getCategoryDisplayName = (category: string) => {
-  return categoryDisplayNames[category] || category;
-};
-
-// カルーセルのカスタムスタイルを修正
+// カルーセルのカスタムスタイル
 const customStyles = `
   .slick-slide {
     padding: 0 0px;

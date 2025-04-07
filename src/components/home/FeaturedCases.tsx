@@ -1,45 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Box, Container, Heading, Text, SimpleGrid, Button, Flex, AspectRatio, Link, Grid, VStack, Image, Tag, Wrap, WrapItem } from '@chakra-ui/react'
+import { Box, Container, Text, Grid, VStack, Image, Tag, Wrap, WrapItem, Flex, Button, Heading } from '@chakra-ui/react'
 import { motion, useAnimation } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FaArrowRight } from 'react-icons/fa'
 import { client } from '../../lib/microcms'
 import { Link as RouterLink } from 'react-router-dom'
 import PageHeader from '../common/PageHeader'
+import { Case, MicroCMSResponse } from '@/types'
 
-// 主要事例データ
-const featuredCases = [
-  {
-    id: 'ai-trading-platform',
-    title: 'AIツールプラットフォーム',
-    category: 'AI',
-    description: '開発AIツールの活用と、自社カスタマイズ可能なローカル環境構築、大規模機械学習環境の構築まで対応可能',
-    image: '/src/assets/images/case-placeholder-1.jpg',
-    color: '#00b8d4',
-  },
-  {
-    id: 'vr-training-system',
-    title: 'VR空間の設計と活用',
-    category: 'メタバース',
-    description: 'イベント会場設営からメタバース店舗建築、独自メタバース空間でのイベント運営からアバター制作まで全て対応可能。',
-    image: '/src/assets/images/case-placeholder-2.jpg',
-    color: '#9c27b0',
-  },
-  {
-    id: 'global-ecommerce',
-    title: 'AI搭載webサイトも実現',
-    category: 'ウェブ開発',
-    description: '多言語対応可能なAIチャットボット搭載のwebサイト構築、Reactでのwebページ製作から保守管理まで',
-    image: '/src/assets/images/case-placeholder-3.jpg',
-    color: '#2196f3',
-  },
-]
+interface FeaturedCasesProps {
+  isHomePage?: boolean;
+}
 
-const FeaturedCases: React.FC = ({ isHomePage = false }) => {
+const FeaturedCases: React.FC<FeaturedCasesProps> = ({ isHomePage = false }) => {
   const controls = useAnimation()
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true })
   const parallaxRef = useRef<HTMLDivElement>(null)
-  const [data, setData] = useState<any>(null)
+  const [data, setData] = useState<MicroCMSResponse<Case> | null>(null)
   
   // アニメーションの設定
   useEffect(() => {
@@ -151,7 +128,7 @@ const FeaturedCases: React.FC = ({ isHomePage = false }) => {
               }}
               gap={8}
             >
-              {data?.contents.map((item: any) => (
+              {data?.contents.map((item: Case) => (
                 <RouterLink 
                   to={`/cases/${item.id}`} 
                   key={item.id}
