@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Box, Container, Heading, Text, SimpleGrid, VStack, FormControl, FormLabel, Input, Textarea, Button, Select, useToast, FormErrorMessage, Flex, Icon } from '@chakra-ui/react'
+import { Box, Container, Heading, Text, VStack, FormControl, FormLabel, Input, Textarea, Button, Select, useToast, FormErrorMessage } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import { FaEnvelope, FaClock, FaGlobe } from 'react-icons/fa'
 import PageHeader from '../components/common/PageHeader'
 
 const ContactPage: React.FC = () => {
@@ -66,24 +65,6 @@ const ContactPage: React.FC = () => {
     { value: 'other', label: 'その他' }
   ]
 
-  const contactInfo = [
-    {
-      icon: FaEnvelope,
-      title: 'メールアドレス',
-      content: 'contact@ideal-official.com'
-    },
-    {
-      icon: FaClock,
-      title: '対応時間',
-      content: '平日 9:00 - 18:00'
-    },
-    {
-      icon: FaGlobe,
-      title: 'ウェブサイト',
-      content: 'https://ideal-official.com'
-    }
-  ]
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -145,150 +126,118 @@ const ContactPage: React.FC = () => {
         subtitle="ご質問・ご相談はこちらから"
       />
       <Container maxW="container.xl" py={8}>
-        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={8}>
-          {/* お問い合わせフォーム */}
-          <Box as={motion.div} variants={itemVariants}>
-            <VStack spacing={6} align="stretch">
-              <Heading size="md">お問い合わせフォーム</Heading>
-              <form onSubmit={handleSubmit}>
-                <VStack spacing={4}>
-                  <FormControl isInvalid={!!errors.name}>
-                    <FormLabel>お名前 <Text as="span" color="red.500">*</Text></FormLabel>
-                    <Input
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="例：山田 太郎"
-                      variant="filled"
-                    />
-                    <FormErrorMessage>{errors.name}</FormErrorMessage>
-                  </FormControl>
+        {/* お問い合わせフォーム */}
+        <Box as={motion.div} variants={itemVariants}>
+          <VStack spacing={6} align="stretch">
+            <Heading size="md">お問い合わせフォーム</Heading>
+            <form onSubmit={handleSubmit}>
+              <VStack spacing={4}>
+                <FormControl isInvalid={!!errors.name}>
+                  <FormLabel>お名前 <Text as="span" color="red.500">*</Text></FormLabel>
+                  <Input
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="例：山田 太郎"
+                    variant="filled"
+                  />
+                  <FormErrorMessage>{errors.name}</FormErrorMessage>
+                </FormControl>
 
-                  <FormControl isInvalid={!!errors.email}>
-                    <FormLabel>メールアドレス <Text as="span" color="red.500">*</Text></FormLabel>
-                    <Input
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="例：example@email.com"
-                      variant="filled"
-                    />
-                    <FormErrorMessage>{errors.email}</FormErrorMessage>
-                  </FormControl>
+                <FormControl isInvalid={!!errors.email}>
+                  <FormLabel>メールアドレス <Text as="span" color="red.500">*</Text></FormLabel>
+                  <Input
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="例：example@email.com"
+                    variant="filled"
+                  />
+                  <FormErrorMessage>{errors.email}</FormErrorMessage>
+                </FormControl>
 
-                  <FormControl isInvalid={!!errors.category}>
-                    <FormLabel>カテゴリ <Text as="span" color="red.500">*</Text></FormLabel>
-                    <Select
-                      name="category"
-                      value={formData.category}
-                      onChange={handleChange}
-                      variant="filled"
-                    >
-                      {categoryOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </Select>
-                    <FormErrorMessage>{errors.category}</FormErrorMessage>
-                  </FormControl>
-
-                  <FormControl isInvalid={!!errors.type}>
-                    <FormLabel>内容 <Text as="span" color="red.500">*</Text></FormLabel>
-                    <Select
-                      name="type"
-                      value={formData.type}
-                      onChange={handleChange}
-                      variant="filled"
-                    >
-                      {typeOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </Select>
-                    <FormErrorMessage>{errors.type}</FormErrorMessage>
-                  </FormControl>
-
-                  <FormControl>
-                    <FormLabel>職種</FormLabel>
-                    <Input
-                      name="occupation"
-                      value={formData.occupation}
-                      onChange={handleChange}
-                      placeholder="例：エンジニア、プロジェクトマネージャー"
-                      variant="filled"
-                    />
-                  </FormControl>
-
-                  <FormControl>
-                    <FormLabel>業種</FormLabel>
-                    <Input
-                      name="industry"
-                      value={formData.industry}
-                      onChange={handleChange}
-                      placeholder="例：IT、製造業、金融"
-                      variant="filled"
-                    />
-                  </FormControl>
-
-                  <FormControl isInvalid={!!errors.message}>
-                    <FormLabel>メッセージ <Text as="span" color="red.500">*</Text></FormLabel>
-                    <Textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      placeholder="ご質問・ご相談内容を入力してください"
-                      rows={6}
-                      variant="filled"
-                    />
-                    <FormErrorMessage>{errors.message}</FormErrorMessage>
-                  </FormControl>
-
-                  <Button
-                    type="submit"
-                    colorScheme="blue"
-                    width="full"
-                    isLoading={isSubmitting}
+                <FormControl isInvalid={!!errors.category}>
+                  <FormLabel>カテゴリ <Text as="span" color="red.500">*</Text></FormLabel>
+                  <Select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    variant="filled"
                   >
-                    送信する
-                  </Button>
-                </VStack>
-              </form>
-            </VStack>
-          </Box>
+                    {categoryOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
+                  <FormErrorMessage>{errors.category}</FormErrorMessage>
+                </FormControl>
 
-          {/* 連絡先情報 */}
-          <Box as={motion.div} variants={itemVariants}>
-            <VStack spacing={6} align="stretch">
-              <Heading size="md">連絡先情報</Heading>
-              <SimpleGrid columns={1} spacing={4}>
-                {contactInfo.map((info, index) => (
-                  <Flex key={index} align="center" p={4} borderWidth="1px" borderRadius="lg">
-                    <Icon as={info.icon} boxSize={6} mr={4} color="blue.500" />
-                    <VStack align="start" spacing={0}>
-                      <Text fontWeight="bold">{info.title}</Text>
-                      <Text>{info.content}</Text>
-                    </VStack>
-                  </Flex>
-                ))}
-              </SimpleGrid>
+                <FormControl isInvalid={!!errors.type}>
+                  <FormLabel>内容 <Text as="span" color="red.500">*</Text></FormLabel>
+                  <Select
+                    name="type"
+                    value={formData.type}
+                    onChange={handleChange}
+                    variant="filled"
+                  >
+                    {typeOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
+                  <FormErrorMessage>{errors.type}</FormErrorMessage>
+                </FormControl>
 
-              {/* 注意事項 */}
-              <Box p={4} borderWidth="1px" borderRadius="lg" bg="whiteAlpha.50">
-                <VStack align="start" spacing={2}>
-                  <Text fontWeight="bold">ご注意事項</Text>
-                  <Text fontSize="sm">
-                    • お問い合わせの内容によっては、回答にお時間をいただく場合がございます。<br />
-                    • 営業目的のお問い合わせはお断りさせていただきます。<br />
-                    • 個人情報は適切に管理し、第三者への提供は行いません。
-                  </Text>
-                </VStack>
-              </Box>
-            </VStack>
-          </Box>
-        </SimpleGrid>
+                <FormControl>
+                  <FormLabel>職種</FormLabel>
+                  <Input
+                    name="occupation"
+                    value={formData.occupation}
+                    onChange={handleChange}
+                    placeholder="例：エンジニア、プロジェクトマネージャー"
+                    variant="filled"
+                  />
+                </FormControl>
+
+                <FormControl>
+                  <FormLabel>業種</FormLabel>
+                  <Input
+                    name="industry"
+                    value={formData.industry}
+                    onChange={handleChange}
+                    placeholder="例：IT、製造業、金融"
+                    variant="filled"
+                  />
+                </FormControl>
+
+                <FormControl isInvalid={!!errors.message}>
+                  <FormLabel>メッセージ <Text as="span" color="red.500">*</Text></FormLabel>
+                  <Textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="ご質問・ご相談内容を入力してください"
+                    rows={6}
+                    variant="filled"
+                  />
+                  <FormErrorMessage>{errors.message}</FormErrorMessage>
+                </FormControl>
+
+                <Button
+                  type="submit"
+                  colorScheme="blue"
+                  width="full"
+                  isLoading={isSubmitting}
+                >
+                  送信する
+                </Button>
+              </VStack>
+            </form>
+          </VStack>
+        </Box>
       </Container>
     </Box>
   )
