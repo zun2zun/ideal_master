@@ -89,7 +89,7 @@ export const ProviderDetailPage = () => {
                   <Text fontWeight="bold">{achievement.title}</Text>
                   <Text color="gray.600">{achievement.description}</Text>
                   <HStack spacing={2}>
-                    <Badge colorScheme="purple">{achievement.industry}</Badge>
+                    <Badge colorScheme="purple">{achievement.role}</Badge>
                     <Text color="gray.500">{achievement.year}年</Text>
                   </HStack>
                 </VStack>
@@ -125,8 +125,8 @@ export const ProviderDetailPage = () => {
           <VStack align="start" spacing={2}>
             <Text fontWeight="bold">連絡先</Text>
             <Text>メール: {provider.contact.email}</Text>
-            {provider.contact.phone && (
-              <Text>電話: {provider.contact.phone}</Text>
+            {provider.contact.github && (
+              <Text>GitHub: {provider.contact.github}</Text>
             )}
             {provider.contact.website && (
               <Text>ウェブサイト: {provider.contact.website}</Text>
